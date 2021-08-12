@@ -10,17 +10,24 @@ if ($_REQUEST['product']) {
     $result = $conn->query($sql);
     while ($row = $result->fetch_assoc()) { //get the category name of the selected product
         $ct = $row['categoryName'];
-        $statValue = $row['status'];
+        $currentStat = $row['status'];
     }
 
-    if ($statValue == 1){
-        $stat = "Sale";
-        $statUpdate = "Discontinued";
-    } elseif ($statValue == 0) {
-        $stat = "Discontinued";
-        $statUpdate = "Sale";}
+    switch ($currentStat) {
+        case 1:
+            $currentText = "On Sale";
+            $updateStat = 0;
+            $updateText = "Discontinued";
+            break;
+        case 0:
+            $currentText = "Discontinued";
+            $updateStat = 1;
+            $updateText = "On Sale";
+            break;
 
-    //find all category and exclude the selected product's category
+    }
+
+   //find all category and exclude the selected product's category
     $list = $conn->query("SELECT categoryName FROM category WHERE categoryName NOT LIKE '$ct'");
 
     //store all <option> tags with categories in a variable
@@ -58,8 +65,8 @@ if ($_REQUEST['product']) {
                     </select>
                     <span class='input-group-text'>Status:</span>
                     <select class='form-select' style='max-width:20%' name='status' id='stt'>
-                        <option value='{$stat}'>{$stat}</option>
-                        <option value='{$statUpdate}'>{$statUpdate}</option>
+                        <option value='{$currentStat}'>{$currentText}</option>
+                        <option value='{$updateStat}'>{$updateText}</option>
                     </select>
                 </div>
                 <div >

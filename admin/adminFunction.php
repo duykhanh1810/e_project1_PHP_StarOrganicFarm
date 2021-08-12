@@ -116,7 +116,7 @@ function admin_displayProduct($search, $order)
                 <td style='text-align:justify; padding-left:20px;font-size:16px'><?= $item['productDetail'] ?></td>
                 <td style='font-size:15px'>$<?= $item['unitPrice'] ?>/<?= $item['unit'] ?></td>
                 <td><?php if ($item['status'] == 1) {
-                        echo "Sale";
+                        echo "On Sale";
                     } else {
                         echo "Discontinued";
                     } ?></td>
@@ -245,7 +245,7 @@ function admin_addUser($uname, $email, $pass, $repass, $role)
     $uname = trim($uname);
     if (strlen($uname) < 2) { //first, a name must equal or longer than 2 characters.
         $error['name'] = 'User name must contain atleast 2 characters.';
-    } elseif (preg_match('/^[A-Za-z0-9_-]*$/', $uname) === 0) {
+    } elseif (preg_match('/^[A-Za-z0-9_- ]*$/', $uname) === 0) {
         $error['name'] = 'User name can only contain alphanumeric and "-" and "_" characters.';
     } else {
         $uname = $conn->real_escape_string($uname);
@@ -271,15 +271,12 @@ function admin_addUser($uname, $email, $pass, $repass, $role)
         $error['pass'] = 'The second password you re-entered didn\'t match the first one.';
     }
     //role
-    switch ($role) {
-        case 'admin':
-            $roleID = 1;
-            break;
-        case 'sale':
-            $roleID = 2;
-            break;
-        default:
-            $error['role'] = "You must select an account type.";
+    $checkRole = $conn->query("SELECT roleID FROM staffrole");
+    while($row = $checkRole->fetch_assoc()){
+        $roleList[] = $row['roleID']; 
+    }
+    if (!in_array($role, $roleList)) {
+        $error['role'] = "You must select an account type.";
     }
 
     //after validate:
@@ -287,7 +284,7 @@ function admin_addUser($uname, $email, $pass, $repass, $role)
         $pass = password_hash($pass, PASSWORD_DEFAULT);
         $sql = "INSERT INTO staff (userName, email, password, roleID) VALUES (?, ?, ?, ?)";
         $stm = $conn->prepare($sql);
-        $stm->bind_param("sssi", $uname, $email, $pass, $roleID);
+        $stm->bind_param("sssi", $uname, $email, $pass, $role);
         if ($stm->execute()) {
             $result = TRUE;
         } else {
@@ -336,26 +333,12 @@ function admin_updateUser($uid, $uname, $email, $pass, $repass, $role, $status)
         $error['pass'] = 'The second password you re-entered didn\'t match the first one.';
     }
     //role
-    switch ($role) {
-        case 'admin':
-            $roleID = 1;
-            break;
-        case 'sale':
-            $roleID = 2;
-            break;
-        default:
-            $error['role'] = "You must select an account type.";
+    $checkRole = $conn->query("SELECT roleID FROM staffrole");
+    while($row = $checkRole->fetch_assoc()){
+        $roleList[] = $row['roleID']; 
     }
-    //Status:
-    switch ($status) {
-        case 'Active':
-            $statusID = 1;
-            break;
-        case 'Suspend':
-            $statusID = 0;
-            break;
-        default:
-            $statusID = 1;
+    if(!in_array($role, $roleList)){
+        $error['role'] = "You must select an account type.";
     }
     //after validation:
     if (count($error) === 0) {
@@ -363,14 +346,14 @@ function admin_updateUser($uid, $uname, $email, $pass, $repass, $role, $status)
             $pass = password_hash($pass, PASSWORD_DEFAULT);
             $sql = "UPDATE staff SET userName = ?, email = ?, password = ?, roleID = ?, status = ? WHERE staffID = ?";
             $stm = $conn->prepare($sql);
-            $stm->bind_param("sssiii", $uname, $email, $pass, $roleID, $statusID, $uid);
+            $stm->bind_param("sssiii", $uname, $email, $pass, $role, $status, $uid);
             $stm->execute();
             $query = $stm->get_result();
             $stm->close();
         } else {
             $sql = "UPDATE staff SET userName = ?, email = ?, roleID = ?, status = ? WHERE staffID = ?";
             $stm = $conn->prepare($sql);
-            $stm->bind_param("ssiii", $uname, $email, $roleID, $statusID, $uid);
+            $stm->bind_param("ssiii", $uname, $email, $role, $status, $uid);
             $stm->execute();
             $query = $stm->get_result();
             $stm->close();
@@ -679,10 +662,10 @@ function admin_saleValue($date)
     $conn->close();
 }
 
-function admin_displayOrder($search,$date)
+function admin_displayOrder($search, $date)
 {
     $conn = connect();
-    if(!empty($date)){
+    if (!empty($date)) {
         $sql = "SELECT * FROM orders as o
         INNER JOIN customers as c ON o.customerID = c.customerID
         LEFT JOIN staff as s on o.staffID = s.staffID
@@ -700,14 +683,14 @@ function admin_displayOrder($search,$date)
         GROUP BY o.orderID HAVING o.orderStatus LIKE '%$search%'OR s.userName LIKE '%$search%' OR c.customerName LIKE '%$search%' ORDER BY o.orderTime DESC
         ";
     }
-    
+
     $result = $conn->query($sql);
     if ($result->num_rows >= 0) {
         echo "<table class='tbl table table-striped table-hover'>
                 <tr class='head'>
                     <th>Date Time</th>
                     <th>Customer</th>
-                    <th>Total Value</th>
+                    <th class='total'>Total Value</th>
                     <th>Status</th>
                     <th>Staff assigned</th>
                     <th>Details</th>
@@ -719,7 +702,7 @@ function admin_displayOrder($search,$date)
                 <tr>
                     <td>{$date}</td>
                     <td>{$order['customerName']}</td>
-                    <td>{$order['orderValue']}</td>
+                    <td class='sum'>{$order['orderValue']}</td>
                     <td>{$order['orderStatus']}</td>
                     <td>{$order['userName']}</td>
                     <td><buton class='btn btn-success order-detail' data-bs-toggle='modal' data-id='{$order['orderID']}' data-bs-target='#process'>Manage</buton></td>

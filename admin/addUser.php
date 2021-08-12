@@ -27,6 +27,6 @@
         } else {
             $_SESSION['error2'] = $result;
         }
-        header ("location: admin_User.php");
+        header ("location: admin_panel.php?page=user");
     }
 ?>

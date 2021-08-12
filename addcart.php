@@ -2,34 +2,29 @@
 session_start();
 require 'admin/adminFunction.php';
 if (!isset($_SESSION['cart'])) {
-    $_SESSION['cart'] = array(); //delcare session array if not exist
+    $_SESSION['cart'] = array(); //declare cart array if not exist
 }
 if (isset($_POST['itemId'])) {
-    $count = count($_POST['itemId']);
-    $cart = count($_SESSION['cart']);
-    print_r($_SESSION['cart']);
-    echo "<br>";
-    print_r($_POST['itemId']);
-    echo "<br>";
-    for ($j = 0; $j < $cart; $j++) {
-        $check = array_search($_SESSION['cart'][$j]['id'], $_POST['itemId']);
-        if ($check !== FALSE) {
-            echo "duplicate at item: [$check] in POST <br>";
-            $duplicate[] = $check;
+    $count = count($_POST['itemId']); //count items sent by POST
+    $cart = count($_SESSION['cart']); //count current items in cart
+    for ($j = 0; $j < $cart; $j++) { //loop through cart array and check if any item send by POST is exist in cart
+        $index = array_search($_SESSION['cart'][$j]['id'], $_POST['itemId']); //search on item id, return it index key
+        if ($index !== FALSE) {
+            $duplicate[] = $index; //if found duplicate item, return all the index key into an array.
         }
     }
-    echo "<br>";
-    // print_r($duplicate);
-    // exit();
-    echo "session = $cart <br>post = $count<br>";
-    $_SESSION['total'] = 0;
-    for ($i = 0; $i < $count; $i++) {
+    $_SESSION['total'] = 0; //declare session variable to hold the total price of the cart.
+    
+    for ($i = 0; $i < $count; $i++) { //update cart array with items sent by POST
+        /*if an item send by POST has marked as duplicated in cart, it's index will be found in the duplicate array,
+         update it quantity and reset the loop (continue) */
         if (isset($duplicate)) {
-            if (in_array($i, $duplicate)) {
+            if (in_array($i, $duplicate)) { 
                 $_SESSION['cart'][$i]['qtt'] = $_POST['itemQuantity'][$i];
                 continue;
             }
         }
+        //update the next item in cart with item sent by POST
         $_SESSION['cart'][$i + $cart]['id'] = $_POST['itemId'][$i];
         $_SESSION['cart'][$i + $cart]['name'] = $_POST['itemName'][$i];
         $_SESSION['cart'][$i + $cart]['price'] = $_POST['itemPrice'][$i];
@@ -37,10 +32,14 @@ if (isset($_POST['itemId'])) {
     }
 }
 
-$_SESSION['cart'] = array_values($_SESSION['cart']); //reindex array
-$_SESSION['count'] = count($_SESSION['cart']);
+$_SESSION['cart'] = array_values($_SESSION['cart']); //reindex the cart array
+$_SESSION['count'] = count($_SESSION['cart']); //recount the cart array
+
+//remove item from cart:
 if (isset($_GET['remove'])) {
-    $find = $_GET['remove'];
+    $find = $_GET['remove']; //the $_GET variable hold the id of the item in cart
+    /* loop through cart array and find the index key of the item that match the id sent by GET
+    if found, unset it from the cart array and reindex the cart array */
     foreach ($_SESSION['cart'] as $key => $val) {
         if ($val['id'] == $find) {
             $remove = $key;
@@ -49,6 +48,7 @@ if (isset($_GET['remove'])) {
         }
     }
 }
+//print the cart item to the website
 $data = "<table>
                 <tr>
                     <th>ID</th>
@@ -59,14 +59,14 @@ $data = "<table>
                 </tr>
     ";
 $total = 0;
-foreach ($_SESSION['cart'] as $array) {
-    $subtotal = floatval($array['price']) * intval($array['qtt']);
+foreach ($_SESSION['cart'] as $item) {
+    $subtotal = floatval($item['price']) * intval($item['qtt']);
     $data .= "
                 <tr>
-                    <td>{$array['id']}</td>
-                    <td>{$array['name']}</td>
-                    <td>{$array['price']}</td>
-                    <td>{$array['qtt']}</td>
+                    <td>{$item['id']}</td>
+                    <td>{$item['name']}</td>
+                    <td>{$item['price']}</td>
+                    <td>{$item['qtt']}</td>
                     <td>{$subtotal}</td>
                 </tr>
             ";

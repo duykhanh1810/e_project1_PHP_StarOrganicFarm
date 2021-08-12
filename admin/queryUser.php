@@ -16,49 +16,45 @@ if (isset($_POST['user'])) {
     while ($row = $findUser->fetch_assoc()) {
         $user = $row;
     }
-
-    if ($currentID == 1) {
-        if ($user['staffID'] == 1) { //lock rootadmin from editing
-            $currentStatus = "<option value='Acitve'>Active</option>";
+    $result = $conn->query("SELECT * FROM staffrole WHERE roleName != '{$user['roleName']}'");
+    $role = $result->fetch_object();
+    if ($currentID == 1) { //check if the rootadmin is logged in
+        if ($user['staffID'] == 1) {
+            $currentStatus = "<option value='1'>Active</option>";
             $selectStatus = '';
             $selectRole = '';
-            $readonly = ''; //input fields, only rootadmin can edit their own info
+            $readonly = ''; 
         } else {
             $readonly = '';
-            $result = $conn->query("SELECT roleName FROM staffrole WHERE roleName != '{$user['roleName']}'");
-            while ($row = $result->fetch_assoc()) {
-                $selectRole .= "<option value = '{$row['roleName']}'>{$row['roleName']}</option>";
-            }
+            $selectRole .= "<option value = '{$role->roleID}'>{$role->roleName}</option>";
+
             switch ($user['status']) {
                 case 1:
-                    $currentStatus = "<option value='Acitve'>Active</option>";
-                    $selectStatus = "<option value='Suspend'>Suspend</option>";
+                    $currentStatus = "<option value='1'>Active</option>";
+                    $selectStatus = "<option value='0'>Suspend</option>";
                     break;
                 case 0:
-                    $currentStatus = "<option value='Suspend'>Suspend</option>";
-                    $selectStatus = "<option value='Acitve'>Active</option>";
+                    $currentStatus = "<option value='0'>Suspend</option>";
+                    $selectStatus = "<option value='1'>Active</option>";
                     break;
             }
         }
     } else {
-        if ($user['staffID'] == 1) { //lock rootadmin from editing
-            $currentStatus = "<option value='Acitve'>Active</option>";
+        if ($user['staffID'] == 1) { //lock rootadmin from being edited
+            $currentStatus = "<option value='1'>Active</option>";
             $selectStatus = '';
             $readonly = 'readonly'; //lock rootadmin input field
         } else {
             $readonly = '';
-            $result = $conn->query("SELECT roleName FROM staffrole WHERE roleName != '{$user['roleName']}'");
-            while ($row = $result->fetch_assoc()) {
-                $selectRole .= "<option value = '{$row['roleName']}'>{$row['roleName']}</option>";
-            }
+            $selectRole .= "<option value = '{$role->roleID}'>{$role->roleName}</option>";
             switch ($user['status']) {
                 case 1:
-                    $currentStatus = "<option value='Acitve'>Active</option>";
-                    $selectStatus = "<option value='Suspend'>Suspend</option>";
+                    $currentStatus = "<option value='1'>Active</option>";
+                    $selectStatus = "<option value='0'>Suspend</option>";
                     break;
                 case 0:
-                    $currentStatus = "<option value='Suspend'>Suspend</option>";
-                    $selectStatus = "<option value='Acitve'>Active</option>";
+                    $currentStatus = "<option value='0'>Suspend</option>";
+                    $selectStatus = "<option value='1'>Active</option>";
                     break;
             }
         }
@@ -77,7 +73,7 @@ if (isset($_POST['user'])) {
             </select>
             <span class='input-group-text'>Account type:</span>
             <select style='max-width:13%;' class='form-select' name='role' id='role'>
-                <option value='{$user['roleName']}'>{$user['roleName']}</option>
+                <option value='{$user['roleID']}'>{$user['roleName']}</option>
                 {$selectRole}
             </select>
         </div>

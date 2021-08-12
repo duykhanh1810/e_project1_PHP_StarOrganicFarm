@@ -16,13 +16,13 @@ if ($user['userRole'] != 1) {
                     <input type="text" id="uname" class="form-control" name="uname" placeholder="" aria-label="uname" required>
                     <span class="input-group-text">Account type:</span>
                     <select style="max-width:30%;" class="form-select" name="role" id="role">
-                        <option value="select...">select...</option>
+                        <option value="0">select...</option>
                         <?php
                         $conn = connect();
-                        $list = $conn->query("SELECT roleName FROM staffRole");
+                        $list = $conn->query("SELECT * FROM staffRole");
                         if ($list->num_rows > 0) {
                             while ($item = $list->fetch_assoc()) {
-                                echo "<option value=\"{$item['roleName']}\">{$item['roleName']}</option>";
+                                echo "<option value=\"{$item['roleID']}\">{$item['roleName']}</option>";
                             }
                         }
                         $conn->close();

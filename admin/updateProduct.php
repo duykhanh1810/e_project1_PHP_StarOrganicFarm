@@ -15,12 +15,8 @@ if (isset($_POST['save'])) {
     $category = $_POST['category'];
     $price = $_POST['price'];
     $detail = htmlspecialchars($_POST['detail']);
-    $s = $_POST['status'];
-    if ($s === "Sale") {
-        $status = 1;
-    } elseif ($s === "Discontinued") {
-        $status = 0;
-    }
+    $status = $_POST['status'];
+    
     $imgURL = '';
     $errorImg = 0;
     $file = $_FILES['avatar'];
