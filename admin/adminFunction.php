@@ -54,13 +54,12 @@ function admin_AddProduct($name, $price, $detail, $category, $imgURL)
         $sql = "INSERT INTO product (productName, unitPrice, productDetail, categoryID, imgURL) VALUES (?,?,?,?,?)";
         $stm = $conn->prepare($sql);
         $stm->bind_param("sssis", $name, $price, $detail, $categoryID, $imgURL);
-        if($stm->execute()){
+        if ($stm->execute()) {
             return TRUE;
         } else {
             $error = "Unable to add product due to database error.";
             return $error;
         }
-
     }
     $conn->close();
 }
@@ -117,14 +116,14 @@ function admin_displayProduct($search, $order)
                 <td style='text-align:justify; padding-left:20px;font-size:16px'><?= $item['productDetail'] ?></td>
                 <td style='font-size:15px'>$<?= $item['unitPrice'] ?>/<?= $item['unit'] ?></td>
                 <td><?php if ($item['status'] == 1) {
-                echo "Sale";
+                        echo "Sale";
                     } else {
                         echo "Discontinued";
                     } ?></td>
                 <td class="edit"><button class="item-list btn btn-success edit-product" data-bs-toggle="modal" data-id="<?= $item['productID'] ?>" data-bs-target="#editPanel">Update</button></td>
             </tr>
 
-<?php   }
+        <?php   }
         echo "</table>";
     } else {
         echo "<table class='table'><tr><td><b>Product not found.</b></td></tr></table>";
@@ -228,7 +227,7 @@ function admin_displayUser($search)
                 <td class="edit"><button class="item-list btn btn-success edit-user" data-bs-toggle="modal" data-id="<?= $item['staffID'] ?>" data-bs-target="#editPanel">Edit</button></td>
             </tr>
 
-        <?php   }
+<?php   }
         echo "</table>";
     } else {
         echo "<table class='table'><tr><td><b>Product not found.</b></td></tr></table>";
@@ -381,6 +380,69 @@ function admin_updateUser($uid, $uname, $email, $pass, $repass, $role, $status)
     } else {
         return $error;
     }
+    $conn->close();
+}
+
+function user_updateEmail($id, $email)
+{
+    $conn = connect();
+    $error = '';
+    //check email:
+    if (empty($email)) {
+        $error = "Email can not be empty";
+    } else {
+        //validate email string if not empty:
+        $email = filter_var($email, FILTER_SANITIZE_EMAIL);
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $error = "Invalid email address.";
+        } else {
+            //check if email already taken by other user:
+            $checkEmail = $conn->query("SELECT * FROM staff WHERE staffID != '$id' AND email = '$email'");
+            if ($checkEmail->num_rows > 0) {
+                $error = "The email has already taken by other user.";
+            }
+        }
+    }
+    if ($error != '') {
+        return $error;
+    } else {
+        $sql = "UPDATE staff SET email = '$email' WHERE staffID = '$id'";
+        if ($conn->query($sql)) {
+            return TRUE;
+        } else {
+            $error = "Unable to change email due to database error.";
+            return $error;
+        }
+    }
+    $conn->close();
+}
+
+function user_changePass($id, $oldPass, $newPass, $rePass)
+{
+    $conn = connect();
+    $error = '';
+    //validate old pass
+    $query = $conn->query("SELECT * FROM staff WHERE staffID = '$id'");
+    $userInfo = $query->fetch_object();
+    if (!password_verify($oldPass, $userInfo->password)) {
+        $error = 'Incorrect old password';
+    } else {
+        if (strcmp($newPass, $rePass) != 0) {
+            $error = 'The password you re-entered doesn\'t match';
+        }
+    }
+    if ($error != '') {
+        return $error;
+    } else {
+        $newPass = password_hash($newPass, PASSWORD_DEFAULT);
+        $sql = "UPDATE staff SET password = '$newPass' WHERE staffID = '$id'";
+        if ($conn->query($sql)) {
+            return TRUE;
+        } else {
+            $error = "Can not update password due to database error.";
+        }
+    }
+
     $conn->close();
 }
 
@@ -577,7 +639,7 @@ function admin_contact()
                 <td>{$value['phone']}</td>
                 <td>{$value['message']}</td>
                 <td>{$value['datetime']}</td>
-                <td><a class='btn btn-primary' href='mailto:{$value['email']}'>Respond</a></td>
+                <td><a class='btn btn-primary' href='mailto:{$value['email']}'>Email</a></td>
             </tr>
             ";
         }
@@ -617,21 +679,32 @@ function admin_saleValue($date)
     $conn->close();
 }
 
-function admin_displayOrder()
+function admin_displayOrder($search,$date)
 {
     $conn = connect();
-    $sql = "SELECT * FROM orders as o
+    if(!empty($date)){
+        $sql = "SELECT * FROM orders as o
         INNER JOIN customers as c ON o.customerID = c.customerID
         LEFT JOIN staff as s on o.staffID = s.staffID
         LEFT JOIN orderdetail as od ON o.orderID = od.orderID
         INNER JOIN product as p ON od.productID = p.productID
-        GROUP BY o.orderID
-    ";
+        GROUP BY o.orderID HAVING orderTime BETWEEN CONCAT('$date',' 00:00:00') AND CONCAT('$date',' 23:59:59') 
+        AND (o.orderStatus LIKE '%$search%'OR s.userName LIKE '%$search%' OR c.customerName LIKE '%$search%') ORDER BY o.orderTime DESC
+        ";
+    } else {
+        $sql = "SELECT * FROM orders as o
+        INNER JOIN customers as c ON o.customerID = c.customerID
+        LEFT JOIN staff as s on o.staffID = s.staffID
+        LEFT JOIN orderdetail as od ON o.orderID = od.orderID
+        INNER JOIN product as p ON od.productID = p.productID
+        GROUP BY o.orderID HAVING o.orderStatus LIKE '%$search%'OR s.userName LIKE '%$search%' OR c.customerName LIKE '%$search%' ORDER BY o.orderTime DESC
+        ";
+    }
+    
     $result = $conn->query($sql);
     if ($result->num_rows >= 0) {
         echo "<table class='tbl table table-striped table-hover'>
                 <tr class='head'>
-                    <th>ID</th>
                     <th>Date Time</th>
                     <th>Customer</th>
                     <th>Total Value</th>
@@ -644,7 +717,6 @@ function admin_displayOrder()
             $date = date("d/m/Y H:i:s", strtotime($order['orderTime']));
             echo "
                 <tr>
-                    <td>{$order['orderID']}</td>
                     <td>{$date}</td>
                     <td>{$order['customerName']}</td>
                     <td>{$order['orderValue']}</td>
@@ -697,7 +769,7 @@ function admin_updateGallery($img, $category)
 function admin_displayGallery($category)
 {
     $conn = connect();
-    if($category == ''){
+    if ($category == '') {
         $sql = "SELECT * FROM gallery";
     } else {
         $sql = "SELECT * FROM gallery WHERE category = '$category' ORDER BY category";

@@ -47,23 +47,40 @@
     <hr>
     <div class="list">
         <div class="row">
-            <div class="col-8">
+            <div class="col-4">
                 <h3>Order queue</h3>
             </div>
             <div class="col-4">
                 <form action="" method="post" id='search'>
                     <div class="input-group">
-                        <input style="max-width:90%" type="search" class="form-control src" name="searchvalue" id="searchbar" placeholder="Search">
-                        <button class="btn btn-outline-success" type="submit" name="search" id='src-submit'>
+                        <input style="max-width:50%" type="date" class='form-control' name="date" id="">
+                        <button type="submit" name="search" value="" class="btn btn-outline-success">
                             <i class="fa fa-search" aria-hidden="true"></i>
                         </button>
                     </div>
+            </div>
+            <div class="col-4">
+                <div class="input-group">
+                    <input style="max-width:90%" type="search" class="form-control src" name="searchvalue" id="searchbar" placeholder="Search">
+                    <button class="btn btn-outline-success" type="submit" name="search" id='src-submit'>
+                        <i class="fa fa-search" aria-hidden="true"></i>
+                    </button>
+                </div>
                 </form>
             </div>
         </div>
 
         <?php
-        admin_displayOrder();
+        if (isset($_POST['search'])) {
+            if (isset($_POST['date'])) {
+                $date = $_POST['date'];
+            } else {
+                $date = '';
+            }
+            admin_displayOrder($_POST['searchvalue'], $date);
+        } else {
+            admin_displayOrder('', '');
+        }
         ?>
     </div>
     <form id='mng-product' action='processOrder.php' method='post'>

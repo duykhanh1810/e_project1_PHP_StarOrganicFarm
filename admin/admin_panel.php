@@ -33,7 +33,7 @@ if (isset($_SESSION['account'])) {
                     <li class="account">
                         <div style="background: #103814; padding:20px; border-radius: 10px">
                             <span class="icon"><i class="fa fa-user-circle-o" aria-hidden="true"></i></span>
-                            <span class="text"><a href="?page=account">User: <?= $user['userName'] ?></a></span>
+                            <span class="text"><a href="?page=account">User#<?=$user['userID']?>: <?= $user['userName'] ?></a></span>
                         </div>
                     </li>
                     <!-- </a> -->
