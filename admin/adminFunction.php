@@ -227,7 +227,7 @@ function admin_displayUser($search)
                 <td class="edit"><button class="item-list btn btn-success edit-user" data-bs-toggle="modal" data-id="<?= $item['staffID'] ?>" data-bs-target="#editPanel">Edit</button></td>
             </tr>
 
-<?php   }
+        <?php   }
         echo "</table>";
     } else {
         echo "<table class='table'><tr><td><b>Product not found.</b></td></tr></table>";
@@ -272,8 +272,8 @@ function admin_addUser($uname, $email, $pass, $repass, $role)
     }
     //role
     $checkRole = $conn->query("SELECT roleID FROM staffrole");
-    while($row = $checkRole->fetch_assoc()){
-        $roleList[] = $row['roleID']; 
+    while ($row = $checkRole->fetch_assoc()) {
+        $roleList[] = $row['roleID'];
     }
     if (!in_array($role, $roleList)) {
         $error['role'] = "You must select an account type.";
@@ -334,10 +334,10 @@ function admin_updateUser($uid, $uname, $email, $pass, $repass, $role, $status)
     }
     //role
     $checkRole = $conn->query("SELECT roleID FROM staffrole");
-    while($row = $checkRole->fetch_assoc()){
-        $roleList[] = $row['roleID']; 
+    while ($row = $checkRole->fetch_assoc()) {
+        $roleList[] = $row['roleID'];
     }
-    if(!in_array($role, $roleList)){
+    if (!in_array($role, $roleList)) {
         $error['role'] = "You must select an account type.";
     }
     //after validation:
@@ -432,7 +432,7 @@ function user_changePass($id, $oldPass, $newPass, $rePass)
 function admin_displayCategory()
 {
     $conn = connect();
-    $sql = "SELECT c.categoryID, c.categoryName, c.categoryDetail, c.unit, COUNT(p.categoryID) as 'Total product'
+    $sql = "SELECT c.categoryID, c.categoryName, c.categoryDetail, c.unit, c.status, COUNT(p.categoryID) as 'Total product'
         FROM category as c LEFT JOIN product as p ON c.categoryID = p.categoryID
         GROUP BY c.categoryID
     ";
@@ -440,23 +440,25 @@ function admin_displayCategory()
     echo "<table style='table-layout:fixed' class='tbl table table-striped table-hover'>
                 <tr class='head'>
                     <th style='width:20px'>ID</th>
-                    <th style='width:15%'>Category</th>
-                    <th style='width:50%'>Description</th>
+                    <th style='width:12%'>Category</th>
+                    <th style='width:53%'>Description</th>
                     <th>Total product</th>
                     <th style='width:7%'>Unit</th>
+                    <th>Status</th>
                     <th>Manage</th>
                 </tr>
             ";
-    while ($cat = $result->fetch_assoc()) {
-        echo "<tr>
-                <td>{$cat['categoryID']}</td>
-                <td>{$cat['categoryName']}</td>
-                <td style='text-align:justify'>{$cat['categoryDetail']}</td>
-                <td>{$cat['Total product']}</td>
-                <td>{$cat['unit']}</td>
-                <td><button class='btn btn-success edit-ctg' data-bs-toggle='modal' data-bs-target='#editCtg' data-id='{$cat['categoryID']}' style='width:100px'>Edit</button></td>
-            </tr>";
-    }
+    while ($cat = $result->fetch_assoc()): ?>
+        <tr>
+            <td><?= $cat['categoryID'] ?></td>
+            <td><?= $cat['categoryName'] ?></td>
+            <td style='text-align:justify'><?= $cat['categoryDetail'] ?></td>
+            <td><?= $cat['Total product'] ?></td>
+            <td><?= $cat['unit'] ?></td>
+            <td><?= $cat['status'] == 1 ? 'Active' : 'Deactive' ?></td>
+            <td><button class='btn btn-success edit-ctg' data-bs-toggle='modal' data-bs-target='#editCtg' data-id='<?=$cat['categoryID']?>' style='width:80px'>Edit</button></td>
+        </tr>
+<?php endwhile;
     echo "</table>";
     $conn->close();
 }
@@ -518,7 +520,7 @@ function admin_addCategory($cname, $cunit, $detail)
     $conn->close();
 }
 
-function admin_updateCategory($id, $name, $detail, $unit)
+function admin_updateCategory($id, $name, $detail, $unit, $status)
 {
     $conn = connect();
     $error = [];
@@ -542,9 +544,9 @@ function admin_updateCategory($id, $name, $detail, $unit)
     if (count($error) > 0) {
         return $error;
     } else {
-        $sql = "UPDATE category SET categoryName = ?, categoryDetail = ?, unit = ? WHERE categoryID = ?";
+        $sql = "UPDATE category SET categoryName = ?, categoryDetail = ?, unit = ?, status = ? WHERE categoryID = ?";
         $stm = $conn->prepare($sql);
-        $stm->bind_param("sssi", $name, $detail, $unit, $id);
+        $stm->bind_param("sssii", $name, $detail, $unit, $status, $id);
         if ($stm->execute()) {
             return TRUE;
         } else {

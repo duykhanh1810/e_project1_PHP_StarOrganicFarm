@@ -12,7 +12,8 @@ if(isset($_POST['save'])){
     $name = $_POST['name'];
     $detail = htmlspecialchars($_POST['detail']);
     $unit = htmlspecialchars($_POST['unit']);
-    $result = admin_updateCategory($id,$name, $detail, $unit);
+    $status = $_POST['status'];
+    $result = admin_updateCategory($id,$name, $detail, $unit, $status);
     
     if($result !== TRUE){
         $_SESSION['errUpdate'] = $result;

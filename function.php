@@ -1,7 +1,7 @@
 <?php 
 class Contact{
     private $host="localhost";
-    private $user="root";
+    private $user="customer";
     private $pass="";
     private $db="starorganic";
     public $mysqli;

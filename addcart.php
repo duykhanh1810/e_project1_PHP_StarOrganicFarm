@@ -60,7 +60,7 @@ $data = "<table>
     ";
 $total = 0;
 foreach ($_SESSION['cart'] as $item) {
-    $subtotal = floatval($item['price']) * intval($item['qtt']);
+    $subtotal = floatval($item['price']) * intval($item['qtt']); //caculate subtotal of each item
     $data .= "
                 <tr>
                     <td>{$item['id']}</td>
@@ -70,7 +70,7 @@ foreach ($_SESSION['cart'] as $item) {
                     <td>{$subtotal}</td>
                 </tr>
             ";
-    $total += $subtotal;
+    $total += $subtotal; //calculate total price
 }
 
 $data .= "<tr>
@@ -79,7 +79,6 @@ $data .= "<tr>
     </table>";
 echo $data;
 $_SESSION['total'] = $total;
-
-print_r($_SESSION['cart']);
+// print_r($_SESSION['cart']);
 header("location: ". $_SERVER['HTTP_REFERER']."#cart");
 // session_unset();

@@ -13,12 +13,12 @@ if (isset($_POST['search-text'])) {
         INNER JOIN category ON product.categoryID = category.categoryID
         WHERE product.productName LIKE CONCAT('%','$search','%') 
         OR category.categoryName LIKE CONCAT('%','$search','%')
-        AND product.status = 1
+        AND product.status = 1 AND category.status = 1
         ");
 } else {
     $product = $conn->query("SELECT * FROM product 
     INNER JOIN category ON product.categoryID = category.categoryID 
-    WHERE product.categoryID = '$id' AND product.status = 1");
+    WHERE product.categoryID = '$id' AND product.status = 1 AND category.status = 1");
 }
 
 ?>
@@ -137,8 +137,8 @@ if (isset($_POST['search-text'])) {
                         </tfoot>
                     </table>
                     <div class='order-btn'>
-                        <button type='submit' name='cart' class="btn purchase-btn">Save to Cart</button>
-                        <a href="customer-cart.php" class="btn purchase-btn">Go to Cart</a>
+                        <button type='submit' name='cart' class="btn purchase-btn">Save in Cart</button>
+                        <a type='submit' name='cart' href="customer-cart.php" class="btn purchase-btn">Go to Cart</a>
                         <!-- <a href="login.php#page-title" class="btn purchase-btn">Place Order</a> -->
                     </div>
                     <!-- <button href="login.html#page-title" class="purchase-btn">Purchase</button> -->

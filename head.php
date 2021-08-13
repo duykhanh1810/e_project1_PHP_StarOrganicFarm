@@ -18,7 +18,7 @@
                         <a href="#prd" id="drop">Product <span class="cheveron"></span></a>
                         <div class="subitem">
                             <?php
-                            $prd = $conn->query("SELECT * FROM category");
+                            $prd = $conn->query("SELECT * FROM category WHERE status = 1");
                             while ($row = $prd->fetch_assoc()) {
                                 echo "
                                     <a href='?id={$row['categoryID']}#prd'>{$row['categoryName']}</a>

@@ -3,6 +3,130 @@ session_start();
 require_once "admin/adminFunction.php";
 $conn = connect();
 ?>
+<?php
+// Functions to filter user inputs
+function filterName($field){
+    // Làm sạch tên người dùng
+    $field = filter_var(trim($field), FILTER_SANITIZE_STRING);
+    
+    // Xác thực tên người dùng
+    if(filter_var($field, FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>"/^[a-zA-Z\s]+$/")))){
+        return $field;
+    } else{
+        return FALSE;
+    }
+}  
+function filtersurName($field){
+    // Làm sạch tên người dùng
+    $field = filter_var(trim($field), FILTER_SANITIZE_STRING);
+    
+    // Xác thực tên người dùng
+    if(filter_var($field, FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>"/^[a-zA-Z\s]+$/")))){
+        return $field;
+    } else{
+        return FALSE;
+    }
+}  
+function filterPhone($field){
+    // Làm sạch tên người dùng
+    $field = filter_var(trim($field), FILTER_SANITIZE_NUMBER_INT);
+    
+    // Xác thực Email
+    if(filter_var($field, FILTER_VALIDATE_INT)){
+        return $field;
+    } else{
+        return FALSE;
+    }
+}  
+function filterEmail($field){
+    // Làm sạch Email
+    $field = filter_var(trim($field), FILTER_SANITIZE_EMAIL);
+    
+    // Xác thực Email
+    if(filter_var($field, FILTER_VALIDATE_EMAIL)){
+        return $field;
+    } else{
+        return FALSE;
+    }
+}
+function filterString($field){
+    // Làm sạch nội dung
+    $field = filter_var(trim($field), FILTER_SANITIZE_STRING);
+    if(!empty($field)){
+        return $field;
+    } else{
+        return FALSE;
+    }
+}
+ 
+// Khai báo biến và khởi tạo các giá trị trống
+$nameErr = $surnameErr = $phoneErr = $emailErr = $messageErr = "";
+$name = $surname = $phone = $email = $subject = $message = "";
+ 
+// Xử lý dữ liệu biểu mẫu khi biểu mẫu được gửi
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+ 
+    // Xác thực tên người dùng
+    if(empty($_POST["name"])){
+        $nameErr = "Nhập tên của bạn.";
+    } else{
+        $name = filterName($_POST["name"]);
+        if($name == FALSE){
+            $nameErr = "Nhập tên hợp lệ.";
+        }
+    }
+
+    if(empty($_POST["surname"])){
+        $surnameErr = "Nhập tên của bạn.";
+    } else{
+        $surname = filtersurName($_POST["surname"]);
+        if($surname == FALSE){
+            $surnameErr = "Nhập tên hợp lệ.";
+        }
+    }
+
+    if(empty($_POST["phone"])){
+        $phoneErr = "Nhập phone của bạn.";
+    } else{
+        $phone = filterPhone($_POST["phone"]);
+        if($phone == FALSE){
+            $phoneErr = "Enter a valid phone number";
+            header("location:contact.php");
+            exit();
+        }
+    }
+    
+    // Xác thực Email
+    if(empty($_POST["email"])){
+        $emailErr = "Nhập địa chỉ Email.";     
+    } else{
+        $email = filterEmail($_POST["email"]);
+        if($email == FALSE){
+            $emailErr = "Enter a valid email";
+            header("location:contact.php");
+            exit();
+        }
+    }
+    
+    // Xác thực số điện thoại
+    // if(empty($_POST["subject"])){
+    //     $subject = "";
+    // } else{
+    //     $subject = filterString($_POST["subject"]);
+    // }
+    
+    // Xác thực nội dung
+    if(empty($_POST["message"])){
+        $messageErr = "Điền nhận xét.";     
+    } else{
+        $message = filterString($_POST["message"]);
+        if($message == FALSE){
+            $messageErr = "Điền nhận xét hợp lệ.";
+        }
+    }
+    
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,6 +136,13 @@ $conn = connect();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us</title>
     <script src="js/norepeat.js"></script>
+    <script src="js/infomation.js"></script>
+    <script>
+        var input = document.getElementById('form_message');
+        input.oninvalid = function(event) {
+    event.target.setCustomValidity('Message should only contain lowercase letters. e.g. john');
+}
+    </script>
     <!-- jquery cdn-->
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
     <!-- way point plugin-->
@@ -112,14 +243,16 @@ $conn = connect();
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="form_name">Firstname *</label>
-                                        <input id="form_name" type="text" name="name" class="form-control" placeholder="Please enter your firstname *" required="required" data-error="Firstname is required.">
+                                        <input id="form_name" type="text" name="name" class="form-control" placeholder="Please enter your firstname *" required="required" data-error="Firstname is required." value="<?php echo $name; ?>">
+                                        <span class="error"><?php echo $nameErr; ?></span>
                                         <div class="help-block with-errors"></div>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="form_lastname">Lastname *</label>
-                                        <input id="form_lastname" type="text" name="surname" class="form-control" placeholder="Please enter your lastname *" required="required" data-error="Lastname is required.">
+                                        <input id="form_lastname" type="text" name="surname" class="form-control" placeholder="Please enter your lastname *" required="required" data-error="Lastname is required." value="<?php echo $surname; ?>">
+                                        <span class="error"><?php echo $surnameErr; ?></span>
                                         <div class="help-block with-errors"></div>
                                     </div>
                                 </div>
@@ -128,14 +261,16 @@ $conn = connect();
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="form_email">Email *</label>
-                                        <input id="form_email" type="email" name="email" class="form-control" placeholder="Please enter your email *" required="required" data-error="Valid email is required.">
+                                        <input id="form_email" type="email" name="email" class="form-control" placeholder="Please enter your email *" required="required" data-error="Valid email is required." value="<?php echo $email; ?>" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
+                                        <span class="error"><?php echo $emailErr; ?></span>
                                         <div class="help-block with-errors"></div>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="form_phone">Phone</label>
-                                        <input id="form_phone" type="tel" name="phone" class="form-control" placeholder="Please enter your phone">
+                                        <label for="form_phone">Phone *</label>
+                                        <input id="form_phone" type="tel" name="phone" class="form-control" required="required" placeholder="Please enter your phone *" data-error="Valid phone is required" value="<?php echo $phone; ?>" >
+                                        <span class="error"><?php echo $phoneErr; ?></span>
                                         <div class="help-block with-errors"></div>
                                     </div>
                                 </div>
@@ -144,12 +279,13 @@ $conn = connect();
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label for="form_message">Message *</label>
-                                        <textarea id="form_message" name="message" class="form-control" placeholder="Message for me *" rows="4" required="required" data-error="Please,leave us a message."></textarea>
+                                        <textarea id="form_message" name="message" class="form-control" placeholder="Message for me *" rows="4" required="required" data-error="Please,leave us a message." pattern="[a-z]{1,15}"><?php echo $message; ?></textarea>
+                                        <span class="error"><?php echo $messageErr; ?></span>
                                         <div class="help-block with-errors"></div>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
-                                    <input type="submit" name="ok" class="btn btn-success btn-send" value="Send message">
+                                    <input type="submit" name="ok" class="btn btn-success btn-send" value="Send message" onclick="send()">
                                 </div>
                             </div>
                             <div class="row">
@@ -172,7 +308,7 @@ $conn = connect();
                         }
                     }
                     ?>
-
+                
                 </div><!-- /.8 -->
 
             </div> <!-- /.row-->

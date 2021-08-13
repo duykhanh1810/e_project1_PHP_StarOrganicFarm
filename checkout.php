@@ -25,7 +25,8 @@ if(isset($_SESSION['cart'])){
         }
         
         $_SESSION['notification'] = "Dear {$_SESSION['name']}, Thank you for choosing our products. Our staff will contact you within 24 hours for confirmation and start processing your order. Best regard!";
-
+        unset($_SESSION['cart']);
+        $conn->close;
         header ("location: index.php");
     }
 }

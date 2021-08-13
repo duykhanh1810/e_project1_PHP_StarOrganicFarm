@@ -92,13 +92,13 @@
                 <div class="row">
                     <div id="purchase-form" class="col-md-8">
                         <form action="checkout.php" id="purchase" class="myform" method="post">
-                            <label for="order-adress">Order Adress: </label>
+                            <label for="order-adress">Delivery Adress: </label>
                             <input type="text" name="address" id=order-adress required="required" placeholder="enter your order adress">
 
                             <label for="phone">Phone number: </label>
                             <input type="tel" name="phone" pattern="^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$" id="phone" required="required" placeholder="enter your phone number">
 
-                            <div class="purchase-method">
+                            <!-- <div class="purchase-method">
                                 <p id="title">Choose your payment method: </p>
                                 <div class="method-container">
                                     <input type="radio" value="cash" id="cash" name="purchase-method">
@@ -108,8 +108,8 @@
                                     <input type="radio" value="card" id="card" name="purchase-method" checked>
                                     <label for="cash" class="method-name">Payment by credit card: Bank Transfer </label>
                                 </div>
-                            </div>
-                            <div class="delivery-method">
+                            </div> -->
+                            <!-- <div class="delivery-method">
                                 <p id="title">Choose a shipping method: </p>
                                 <div class="method-container">
                                     <input type="radio" value="cash" id="cash" name="delivery-method">
@@ -119,7 +119,7 @@
                                     <input type="radio" value="card" id="card" name="delivery-method" checked>
                                     <label for="cash" class="method-name">Regular delivery (You will receive the product within 3-5 days)</label>
                                 </div>
-                            </div>
+                            </div> -->
                             <input name="submit" type="submit" value="PURCHASE" id="purchase-btn">
                         </form>
 
@@ -162,7 +162,7 @@
         <!--/content-->
         <div id="foot">
             <div id="copyrights">
-                Copyright &copy 2019. All rights reserved by Pink Panther Team
+                Copyright &copy 2021. All rights reserved by Brothers In Farm.
             </div>
             <div id="social-media">
                 <a href="#"><i class="fab fa-facebook"></i></a>

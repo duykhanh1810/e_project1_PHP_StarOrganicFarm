@@ -18,6 +18,6 @@ if (isset($_SESSION['cart'])) {
             </td>
         </tr>
 <?php
-    }
+    };
 }
 ?>
