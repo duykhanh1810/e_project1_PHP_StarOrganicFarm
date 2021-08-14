@@ -57,10 +57,16 @@ if (!isset($_SESSION['login'])) {
                             <span class='cheveron'></span>
                         </a>
                         <div class="subitem">
-                            <a href="product.php?id=2#prd">Rice</a>
-                            <a href="product.php?id=4#prd">Oils</a>
-                            <a href="product.php?id=1#prd">Fruit</a>
-                            <a href="product.php?id=3#prd">Condiment and spice</a>
+                            <?php
+                            $conn = connect();
+                            $prd = $conn->query("SELECT * FROM category WHERE status = 1");
+                            while ($row = $prd->fetch_assoc()) {
+                                echo "
+                                    <a href='?id={$row['categoryID']}#prd'>{$row['categoryName']}</a>
+                                ";
+                            }
+                            $conn->close();
+                            ?>
                         </div>
                     </div>
                     <a href="contact-us.html">Contact Us</a>
@@ -116,7 +122,7 @@ if (!isset($_SESSION['login'])) {
                     <tbody class="cart-items">
 
                         <?php
-                            require "cart.php";
+                        require "cart.php";
                         ?>
 
                     </tbody>
@@ -137,6 +143,7 @@ if (!isset($_SESSION['login'])) {
 
         <div id="foot">
             <div id="copyrights">
+                Copyright & copy <?= date("Y") ?>. All rights reserved by Brothers In Farm
             </div>
             <div id="social-media">
                 <a href="#"><i class="fab fa-facebook"></i></a>

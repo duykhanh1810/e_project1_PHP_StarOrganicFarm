@@ -167,7 +167,7 @@ if (isset($_POST['search-text'])) {
         <!--end content div-->
         <div id="foot">
             <div id="copyrights">
-                Copyright & copy 2021. All rights reserved by Agricultural brothers
+                Copyright & copy <?=date("Y")?>. All rights reserved by Brothers In Farm
             </div>
             <div id="social-media">
                 <a href="http://fb.com"><i class="fab fa-facebook-square"></i></a>
