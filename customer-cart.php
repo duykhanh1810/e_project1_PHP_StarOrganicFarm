@@ -62,15 +62,15 @@ if (!isset($_SESSION['login'])) {
                             $prd = $conn->query("SELECT * FROM category WHERE status = 1");
                             while ($row = $prd->fetch_assoc()) {
                                 echo "
-                                    <a href='?id={$row['categoryID']}#prd'>{$row['categoryName']}</a>
+                                    <a href='product.php?id={$row['categoryID']}#prd'>{$row['categoryName']}</a>
                                 ";
                             }
                             $conn->close();
                             ?>
                         </div>
                     </div>
-                    <a href="contact-us.html">Contact Us</a>
-                    <a href="gallery.html">Gallery</a>
+                    <a href="contact.php">Contact Us</a>
+                    <a href="gallery.php">Gallery</a>
                     <?php if (isset($_SESSION['login']) && $_SESSION['login'] === true) { ?>
                         <a href="logout.php"><?= $_SESSION['name'] ?>. LogOut</a>
                     <?php } else { ?>

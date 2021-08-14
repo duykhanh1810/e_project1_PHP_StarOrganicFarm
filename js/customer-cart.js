@@ -62,7 +62,6 @@ function updateTotal() {
         var cartRow = cartRows[i];
         var priceEl = cartRow.getElementsByClassName("item-price")[0];
         var price = parseFloat( priceEl.innerText.replace('$', '') );
-
         var quantityEl = cartRow.getElementsByClassName("quantity-input")[0];
         var quantity = quantityEl.value;
         /* calculate the total price */
