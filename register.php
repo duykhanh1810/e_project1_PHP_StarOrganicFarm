@@ -20,7 +20,8 @@ function customerRegister($name, $email, $phone, $pass, $repass) {
     if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
         $error['email'] = 'Invalid email address'; //check email string
     } else {
-        if($checkEmail->num_rows>0){ $checkEmail = $conn->query("SELECT * FROM customers WHERE customerEmail = '$email'");
+        $checkEmail = $conn->query("SELECT * FROM customers WHERE customerEmail = '$email'");
+        if($checkEmail->num_rows>0){ 
             $error['email'] = 'The email you entered has already been registered.'; //check duplicated email
         }
     }

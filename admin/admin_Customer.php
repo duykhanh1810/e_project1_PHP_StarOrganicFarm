@@ -1,4 +1,5 @@
             <div class="content">
+            <div class="content">
                 <h2>Customer Contact</h2>
                 <div class="user add">
                     <h4>Register new user</h4>

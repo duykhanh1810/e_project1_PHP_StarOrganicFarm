@@ -71,10 +71,16 @@ if (isset($_SESSION['account'])) {
                             </li>
                         </a>
                     <?php endif ?>
-                    <a href="?page=customer">
-                        <li class='adminItem <?= $_GET['page'] == "customer" ? "adminItemActive" : "" ?>'>
-                            <span class="icon"><i class="fa fa-user" aria-hidden="true"></i></span>
+                    <a href="?page=feedback">
+                        <li class='adminItem <?= $_GET['page'] == "feedback" ? "adminItemActive" : "" ?>'>
+                            <span class="icon"><i class="fa fa-commenting" aria-hidden="true"></i></i></span>
                             <span class="text">Customer Feedback</span>
+                        </li>
+                    </a>
+                    <a href="?page=customerinfo">
+                        <li class='adminItem <?= $_GET['page'] == "customerinfo" ? "adminItemActive" : "" ?>'>
+                            <span class="icon"><i class="fa fa-address-book-o" aria-hidden="true"></i></span>
+                            <span class="text">Customer Information</span>
                         </li>
                     </a>
                     <a href="logout.php" onclick="return confirm('Do you want to log out?')">
@@ -105,11 +111,14 @@ if (isset($_SESSION['account'])) {
                     case 'user':
                         include_once "admin_User.php";
                         break;
-                    case 'customer':
+                    case 'feedback':
                         include_once "admin_contact.php";
                         break;
                     case "account":
                         include_once "admin_account.php";
+                        break;
+                    case "customerinfo":
+                        include_once "admin_CustomerInfo.php";
                         break;
                     default:
                         include_once "admin_home.php";

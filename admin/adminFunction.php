@@ -230,7 +230,7 @@ function admin_displayUser($search)
                 <td><?= $item['roleName'] ?></td>
                 <td><?= $item['totalOrder'] ?></td>
                 <td><?= $item['successOrder'] ?></td>
-                <td><?= $item['totalOrder'] > 0 ? number_format($item['successOrder'] / $item['totalOrder']*100, 0) : 0 ?>%</td>
+                <td><?= $item['totalOrder'] > 0 ? number_format($item['successOrder'] / $item['totalOrder'] * 100, 0) : 0 ?>%</td>
                 <td>$<?= number_format($item['totalSale'], 2) ?></td>
                 <td class="edit"><button class="item-list btn btn-success edit-user" data-bs-toggle="modal" data-id="<?= $item['staffID'] ?>" data-bs-target="#editPanel">Edit</button></td>
             </tr>
@@ -466,7 +466,7 @@ function admin_displayCategory()
             <td><?= $cat['status'] == 1 ? 'Active' : 'Deactive' ?></td>
             <td><button class='btn btn-success edit-ctg' data-bs-toggle='modal' data-bs-target='#editCtg' data-id='<?= $cat['categoryID'] ?>' style='width:80px'>Edit</button></td>
         </tr>
-<?php endwhile;
+        <?php endwhile;
     echo "</table>";
     $conn->close();
 }
@@ -576,34 +576,36 @@ function totalCustomer()
     $conn->close();
 }
 
-function admin_DisplayCustomer()
+function admin_DisplayCustomer($search)
 {
     $conn = connect();
-    $sql = "SELECT * FROM customers";
+    $sql = "SELECT c.customerName, c.customerEmail, c.customerPhone, SUM(CASE WHEN o.orderStatus = 'success' THEN o.orderValue END) as 'total', COUNT(CASE WHEN o.orderStatus = 'success' THEN o.customerID END) as 'count', c.joinDate
+            FROM `customers` as c LEFT JOIN orders as o ON c.customerID = o.customerID 
+            GROUP BY c.customerID HAVING customerName LIKE '%$search%'";
     $result = $conn->query($sql);
-    echo "<table class='tbl table table-striped table-hover'>
+    if ($result->num_rows > 0) {
+        echo "<table class='tbl table table-striped table-hover'>
                 <tr class='head'>
-                    <th>ID</th>
-                    <th>Customer</th>
+                    <th>UserName</th>
                     <th>Email</th>
                     <th>Phone</th>
-                    <th>Address</th>
+                    <th>Total Order</th>
+                    <th>Total value</th>
                     <th>Join Date</th>
                 </tr>
-    ";
-    while ($row = $result->fetch_assoc()) {
-        $date = date('d/m/Y H:m', strtotime($row['joinDate']));
-        echo "<tr>
-                  <td>{$row['customerID']}</td>
-                  <td>{$row['customerName']}</td>
-                  <td>{$row['customerEmail']}</td>
-                  <td>{$row['customerPhone']}</td>
-                  <td>{$row['customerID']}</td>
-                  <td>{$date}</td>
-            </tr>   
-        ";
+            ";
+        foreach ($result as $value) : ?>
+            <tr>
+                <td><?= $value['customerName'] ?></td>
+                <td><?= $value['customerEmail'] ?></td>
+                <td><?= $value['customerPhone'] ?></td>
+                <td><?= $value['count'] ?></td>
+                <td>$<?= number_format($value['total'], 2) ?></td>
+                <td><?= date('d/m/Y', strtotime($value['joinDate'])) ?></td>
+            </tr>
+<?php endforeach;
+        echo "</table>";
     }
-    echo "</table>";
     $conn->close();
 }
 
@@ -723,8 +725,6 @@ function admin_displayOrder($search, $date)
     }
     $conn->close();
 }
-
-
 
 function admin_updateGallery($img, $category)
 {

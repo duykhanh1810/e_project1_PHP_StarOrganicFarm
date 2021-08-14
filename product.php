@@ -136,7 +136,7 @@ if (isset($_POST['search-text'])) {
                         </tfoot>
                     </table>
                     <div class='order-btn'>
-                        <button type='submit' name='cart' class="btn purchase-btn">Save in Cart</button>
+                        <!-- <button type='submit' name='cart' class="btn purchase-btn">Save in Cart</button> -->
                         <button type='submit' name='gotocart' class="btn purchase-btn" onclick="purchaseButtonClicked();">Go to Cart</button>
                     </div>
                 </form>
