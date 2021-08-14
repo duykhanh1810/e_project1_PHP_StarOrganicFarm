@@ -3,6 +3,7 @@
         $conn = connect();
         $query = $conn->query("SELECT * FROM staff WHERE staffID = '{$user['userID']}'");
         $userInfo = $query->fetch_object();
+        $conn->close();
     }
 ?>
 <div class="content">

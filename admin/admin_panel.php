@@ -29,14 +29,14 @@ if (isset($_SESSION['account'])) {
                     <h4><i class="fa fa-star-o icon" aria-hidden="true"></i>STAR ORGANIC</h4>
                 </div>
                 <ul class="menu">
-                    <!-- <a href=""> -->
+                    <a href="?page=account">
                     <li class="account">
                         <div class='user-account'>
                             <span class="icon"><i class="fa fa-user-circle-o" aria-hidden="true"></i></span>
-                            <span class="text"><a href="?page=account">User#<?=$user['userID']?>: <?= $user['userName'] ?></a></span>
+                            <span class="text">User#<?=$user['userID']?>: <?= $user['userName'] ?></span>
                         </div>
                     </li>
-                    <!-- </a> -->
+                    </a>
                     <a href="?page=home">
                         <li class='adminItem <?= $_GET['page'] == "home" ? "adminItemActive" : "" ?>'>
                             <span class="icon"><i class="fa fa-home" aria-hidden="true"></i></span>
@@ -110,6 +110,7 @@ if (isset($_SESSION['account'])) {
                         break;
                     case "account":
                         include_once "admin_account.php";
+                        break;
                     default:
                         include_once "admin_home.php";
                 }
