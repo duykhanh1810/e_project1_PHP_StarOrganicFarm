@@ -187,12 +187,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                         <a href="index.php#about"><img src="imgs/logo.png" alt="logo"></a>
                     </div>
 
-                    <a href="index.php">Home</a>
+                    <a href="/starorganic/project2/">Home</a>
                     <div class="dropdown-item">
                         <a href="#" id="drop">Product <span class="cheveron"></span></a>
                         <div class="subitem">
                             <?php
-                            $prd = $conn->query("SELECT * FROM category");
+                            $prd = $conn->query("SELECT * FROM category WHERE status = 1");
                             while ($row = $prd->fetch_assoc()) {
                                 echo "
                                     <a href='product.php?id={$row['categoryID']}#prd'>{$row['categoryName']}</a>
@@ -205,12 +205,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                     <a href="gallery.php">Gallery</a>
                 </div>
                 <!-- Search  -->
-                <div id="search-box">
+                <!-- <div id="search-box">
                     <input type="text" name="search-text" placeholder="Type to search">
                     <a href="#" id="search-btn">
                         <i class="fas fa-search"></i>
                     </a>
-                </div>
+                </div> -->
 
             </div><!-- end nav-->
             <!-- Banner -->
@@ -229,10 +229,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
             <div class="row">
 
-                <div class="col-lg-8 col-lg-offset-2">
+                <div id="ct" class="col-lg-8 col-lg-offset-2">
                     <h1 class="contact_heading">Talk to us</h1>
                     <span class="separator"></span>
-
+                    <h5 style="text-align:center">Do you need something specical? <br>Or you want to help us improve our services by providing your feedback? <br>Please let us know.</h5><br>
                     <form id="contact-form" method="post" role="form">
 
                         <div class="messages"></div>
@@ -290,6 +290,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
+                                    <br>
                                     <p class="text-muted"><strong>*</strong> These fields are required. Contact form by <a href="index.php" target="_blank">Star Organic</a>.</p>
                                 </div>
                             </div>

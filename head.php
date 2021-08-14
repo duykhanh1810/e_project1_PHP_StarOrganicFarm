@@ -13,7 +13,7 @@
                         <a href="index.php#about"><img src="imgs/logo.png" alt="logo"></a>
                     </div>
 
-                    <a href="index.php">Home</a>
+                    <a href="/starorganic/project2/">Home</a>
                     <div class="dropdown-item">
                         <a href="#prd" id="drop">Product <span class="cheveron"></span></a>
                         <div class="subitem">
@@ -27,7 +27,7 @@
                             ?>
                         </div>
                     </div>
-                    <a href="contact.php">Contact Us</a>
+                    <a href="contact.php#ct">Contact Us</a>
                     <a href="gallery.php">Gallery</a>
                     <?php if (isset($_SESSION['login']) && $_SESSION['login'] === true) { ?>
                         <a href="logout.php"><?= $_SESSION['name'] ?>. LogOut</a>
@@ -48,7 +48,7 @@
 
 
             <!-- Swiper -->
-            <div class="swiper-container" id="banner-slideshow">
+            <!-- <div class="swiper-container" id="banner-slideshow">
                 <div class="swiper-wrapper">
                     <div class="swiper-slide">
                         <div class="slide-img">
@@ -94,12 +94,12 @@
                         </div>
                     </div>
                 </div>
-                <!-- Add Pagination -->
+                
                 <div class="swiper-pagination"></div>
-                <!-- Add Arrows -->
+                
                 <div class="swiper-button-next"></div>
                 <div class="swiper-button-prev"></div>
-            </div>
+            </div> -->
 
 
         </div>

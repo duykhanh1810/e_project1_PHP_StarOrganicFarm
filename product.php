@@ -89,17 +89,16 @@ if (isset($_POST['search-text'])) {
                                         <span class="product-price"><?= number_format($value['unitPrice'], 2) ?></span>
                                         <span class="dollar">/<?= $value['unit'] ?></span>
                                     </p>
-                                    <p>
-                                        <span></span>
-                                    </p>
-                                    <button type="button" class="AddToCart mybtn"><i class="fas fa-cart-plus"></i> Add To Cart</button>
+                                    <!-- <button type="button" class="AddToCart mybtn"><i class="fas fa-cart-plus" onclick="submitCart();"></i> Add to Cart</button>
+                                    <br> -->
+                                    <button type="button" class="mybtn AddToCart1" onclick="addCart1(<?= $i-1?>);submitCart();">Add to cart</button>
                                 </div>
                             </div>
                     <?php $i++;
                         endforeach;
                     } else {
                         echo "<div class='row' style='text-align:center'>
-                            <h3>We regret that the product you're looking for is not available in our shop.</h3>
+                            <h3>We regret that the product you're looking for is currently not available in our shop.</h3>
                             <h3> If you have any special demand, feel free to <b><a href='contact.php'>contact us</a>!</b></h3>
                         </div>";
                     }
@@ -110,9 +109,9 @@ if (isset($_POST['search-text'])) {
             <!-- cart section-->
             <div id="cart" class="container">
                 <h2 class="cart-header">Cart <i class="fas fa-cart-arrow-down"></i></h2>
+                <form id='cart-submit' action="addcart.php" method="post">
                 <span class="separator"></span>
                 <!-- cart product-->
-                <form action="addcart.php" method="post">
                     <table class="table table-condensed" id="cart-product">
                         <thead>
                             <tr>
@@ -138,10 +137,8 @@ if (isset($_POST['search-text'])) {
                     </table>
                     <div class='order-btn'>
                         <button type='submit' name='cart' class="btn purchase-btn">Save in Cart</button>
-                        <a type='submit' name='cart' href="customer-cart.php" class="btn purchase-btn">Go to Cart</a>
-                        <!-- <a href="login.php#page-title" class="btn purchase-btn">Place Order</a> -->
+                        <button type='submit' name='gotocart' class="btn purchase-btn" onclick="purchaseButtonClicked();">Go to Cart</button>
                     </div>
-                    <!-- <button href="login.html#page-title" class="purchase-btn">Purchase</button> -->
                 </form>
 
             </div>
@@ -158,7 +155,7 @@ if (isset($_POST['search-text'])) {
                         <p><?= $value['productDetail'] ?></p>
                         <p class='unitprice' style="visibility: hidden"><?= $value['unitPrice'] ?></p>
                         <button type="button" class="close-btn mybtn" onclick="toggle(<?= $i + 1 ?>)">Close</button>
-                        <button type="button" class="AddToCart mybtn" onclick="addCart1(<?= $i ?>);toggle(<?= $i + 1 ?>)"><i class="fas fa-cart-plus"></i> Add To Cart</button>
+                        <button type="button" class="AddToCart mybtn" onclick="addCart1(<?= $i ?>);toggle(<?= $i + 1 ?>); submitCart();"><i class="fas fa-cart-plus"></i> Add To Cart</button>
                         <!-- <a href="customer-cart.php" class="AddToCart mybtn" target="_blank"><i class="fas fa-cart-plus"></i> Add To Cart</a> -->
                     </div>
                 <?php
@@ -208,7 +205,10 @@ if (isset($_POST['search-text'])) {
             var price = document.querySelectorAll(".unitprice")[i].textContent;
             addProductToCart(id, name, img, price);
         }
-    </script>
+        function submitCart(){
+            document.getElementById("cart-submit").submit();
+        }
+        </script>
 </body>
 
 </html>

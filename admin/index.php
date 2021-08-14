@@ -36,7 +36,7 @@
                 <input class="input form-control mb-2 mr-sm-2" type="text" placeholder="Enter Username" name="uname" required>
                 <input class="input form-control mb-2 mr-sm-2" type="password" placeholder="Enter Password" name="pass" required><br>
                 <input class="btn btn-primary" type="submit" name="login" value="Login"><br><br>
-                <input class="form-check-input" type="checkbox" checked="checked" name="remember">&nbsp;Remember me
+                <!-- <input class="form-check-input" type="checkbox" checked="checked" name="remember">&nbsp;Remember me -->
             </form>
             <?php
                 if(isset($_SESSION['error'])){

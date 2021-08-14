@@ -6,6 +6,9 @@
     font-family: "Raleway", sans-serif;
 }
 /* add slideshow for banner */
+body{
+    scroll-behavior: auto;
+}
 
 #page {
  
@@ -198,6 +201,22 @@
     position: relative;
     right: 10px;
 }
+
+.product-details .AddToCart1 {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    text-transform: uppercase;
+    background-image: url(../imgs/btn-bg2.png);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}
+
+.product-details .AddToCart1 i {
+    position: relative;
+    right: 10px;
+}
+
 .close-btn {
     background-image: url(../imgs/btn-bg2.png);
     background-size: 100% 100%;

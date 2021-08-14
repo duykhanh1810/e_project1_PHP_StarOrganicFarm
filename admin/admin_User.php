@@ -1,11 +1,7 @@
 <?php
 if ($user['userRole'] != 1) {
-?>
-    <div class="content">
-        <h2>User Account Management</h2>
-        <h3 style="padding: 10px">You don't have permission to access this page.</h3>
-    </div>
-<?php } else { ?>
+    require "accessdenied.html";
+} else { ?>
     <div class="content">
         <h2>User Account Management</h2>
         <div class="user add">

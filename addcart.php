@@ -14,12 +14,12 @@ if (isset($_POST['itemId'])) {
         }
     }
     $_SESSION['total'] = 0; //declare session variable to hold the total price of the cart.
-    
+
     for ($i = 0; $i < $count; $i++) { //update cart array with items sent by POST
         /*if an item send by POST has marked as duplicated in cart, it's index will be found in the duplicate array,
          update it quantity and reset the loop (continue) */
         if (isset($duplicate)) {
-            if (in_array($i, $duplicate)) { 
+            if (in_array($i, $duplicate)) {
                 $_SESSION['cart'][$i]['qtt'] = $_POST['itemQuantity'][$i];
                 continue;
             }
@@ -48,7 +48,7 @@ if (isset($_GET['remove'])) {
         }
     }
 }
-//print the cart item to the website
+//print the cart item to check:
 $data = "<table>
                 <tr>
                     <th>ID</th>
@@ -80,5 +80,13 @@ $data .= "<tr>
 echo $data;
 $_SESSION['total'] = $total;
 // print_r($_SESSION['cart']);
-header("location: ". $_SERVER['HTTP_REFERER']."#cart");
-// session_unset();
+//if customer choose goto cart: redirect them to the customer cart page, otherwise return to the previous page
+if (isset($_POST['gotocart'])) {
+    header("location: customer-cart.php");
+} else {
+    if (isset($_GET['remove'])) {
+        header("location: " . $_SERVER['HTTP_REFERER']."#cart");
+    } else {
+        header("location: " . $_SERVER['HTTP_REFERER']."#prd");
+    }
+}

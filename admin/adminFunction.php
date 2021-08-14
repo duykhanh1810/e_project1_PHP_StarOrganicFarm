@@ -200,10 +200,12 @@ function admin_updateProduct($pid, $pname, $price, $category, $detail, $imgURL, 
 function admin_displayUser($search)
 {
     $conn = connect();
-    $sql = "SELECT s.staffID, s.userName, s.status, sr.roleName, sr.roleDetail, s.email
-    FROM staff as s INNER JOIN staffrole as sr ON s.roleID = sr.roleID 
-    WHERE userName LIKE CONCAT('%','$search','%') OR roleName LIKE CONCAT('%','$search','%')
-    ORDER BY staffID";
+    $sql = "SELECT s.staffID, s.userName, s.status, sr.roleName, s.email, SUM(CASE WHEN o.orderStatus = 'success' THEN o.orderValue ELSE 0 END) as totalSale, COUNT(o.orderStatus) as totalOrder, COUNT(CASE WHEN o.orderStatus = 'success' THEN o.orderStatus END) as successOrder
+    FROM staff as s
+    INNER JOIN staffrole as sr ON s.roleID = sr.roleID
+    LEFT JOIN orders as o ON s.staffID = o.staffID
+    GROUP BY s.staffID HAVING s.userName LIKE '%$search%' OR sr.roleName LIKE '%$search%'
+    ORDER BY s.staffID";
     $list = $conn->query($sql);
     $list = $conn->query($sql);
     if ($list->num_rows > 0) {
@@ -211,9 +213,12 @@ function admin_displayUser($search)
                 <tr class='head'>
                     <th>ID</th>
                     <th>User Name</th>
-                    <th>Account Status</th>
-                    <th>Account Type</th>
-                    <th>Email</th>
+                    <th>Status</th>
+                    <th>Type</th>
+                    <th>Total Order</th>
+                    <th>Success</th>
+                    <th>Rate</th>
+                    <th>Total sale</th>
                     <th>Manage</th>
                 </tr>
             ";
@@ -223,7 +228,10 @@ function admin_displayUser($search)
                 <td><?= $item['userName'] ?></td>
                 <td><?= $item['status'] == 1 ? 'Active' : 'Suspended' ?></td>
                 <td><?= $item['roleName'] ?></td>
-                <td><?= $item['email'] ?></td>
+                <td><?= $item['totalOrder'] ?></td>
+                <td><?= $item['successOrder'] ?></td>
+                <td><?= $item['totalOrder'] > 0 ? number_format($item['successOrder'] / $item['totalOrder']*100, 0) : 0 ?>%</td>
+                <td>$<?= number_format($item['totalSale'], 2) ?></td>
                 <td class="edit"><button class="item-list btn btn-success edit-user" data-bs-toggle="modal" data-id="<?= $item['staffID'] ?>" data-bs-target="#editPanel">Edit</button></td>
             </tr>
 
@@ -448,7 +456,7 @@ function admin_displayCategory()
                     <th>Manage</th>
                 </tr>
             ";
-    while ($cat = $result->fetch_assoc()): ?>
+    while ($cat = $result->fetch_assoc()) : ?>
         <tr>
             <td><?= $cat['categoryID'] ?></td>
             <td><?= $cat['categoryName'] ?></td>
@@ -456,7 +464,7 @@ function admin_displayCategory()
             <td><?= $cat['Total product'] ?></td>
             <td><?= $cat['unit'] ?></td>
             <td><?= $cat['status'] == 1 ? 'Active' : 'Deactive' ?></td>
-            <td><button class='btn btn-success edit-ctg' data-bs-toggle='modal' data-bs-target='#editCtg' data-id='<?=$cat['categoryID']?>' style='width:80px'>Edit</button></td>
+            <td><button class='btn btn-success edit-ctg' data-bs-toggle='modal' data-bs-target='#editCtg' data-id='<?= $cat['categoryID'] ?>' style='width:80px'>Edit</button></td>
         </tr>
 <?php endwhile;
     echo "</table>";

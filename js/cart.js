@@ -17,12 +17,12 @@ function ready() {
         input.addEventListener('change', quantityChanged)
     }
     /* add to cart */
-    var addToCartButtons = document.getElementsByClassName('AddToCart');
+    // var addToCartButtons = document.getElementsByClassName('AddToCart');
 
-    for (var i =0; i < addToCartButtons.length; i++) {
-        var cartButton = addToCartButtons[i];
-        cartButton.addEventListener('click', addToCart)
-    }
+    // for (var i =0; i < addToCartButtons.length; i++) {
+    //     var cartButton = addToCartButtons[i];
+    //     cartButton.addEventListener('click', addToCart)
+    // }
     /* purchase button clicked */
     document.getElementsByClassName('purchase-btn')[0].addEventListener('click', purchaseButtonClicked)
 }
@@ -95,8 +95,8 @@ function addProductToCart(id, title, imgSrc, price) {
     /* append child onclick */
     document.getElementsByClassName('cart-items')[0].append(cartRow);
     /* add event on remove button and input */
-    cartRow.getElementsByClassName("remove")[0].addEventListener('click', removeCartItem);
-    cartRow.getElementsByClassName("quantity-input")[0].addEventListener('change', quantityChanged);
+    // cartRow.getElementsByClassName("remove")[0].addEventListener('click', removeCartItem);
+    // cartRow.getElementsByClassName("quantity-input")[0].addEventListener('change', quantityChanged);
 }
 function cartButtonAnimate() {
     var cartButton = document.getElementsByClassName('scrollToCart')[0];

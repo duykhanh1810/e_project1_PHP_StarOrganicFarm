@@ -1,10 +1,7 @@
 <?php
-if ($user['userRole'] != 1) { ?>
-    <div class="content">
-        <h2>Category Management</h2>
-        <h3 style="padding: 10px">You don't have permission to access this page.</h3>
-    </div>
-<?php exit(); } else { ?>
+if ($user['userRole'] != 1) {
+    require "accessdenied.html";
+exit(); } else { ?>
     <div class="content">
         <h2>Category Management</h2>
         <div class="cat list row">
@@ -106,7 +103,6 @@ if (isset($_SESSION['errUpdate'])) {
 
 if (isset($_SESSION['success'])) {
     echo "<script>alert('{$_SESSION['success']}')</script>";
-    print_r($_SESSION['success']);
     unset($_SESSION['success']);
 }
 ?>

@@ -1,4 +1,5 @@
-<?php 
+<?php
+//This file contain database connection
 define('HOST', 'localhost');
 define('USER', 'root');
 define('PWD', '');

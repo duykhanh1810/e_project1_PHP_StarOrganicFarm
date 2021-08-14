@@ -67,7 +67,7 @@ if (isset($_SESSION['notification'])) {
                         <div class="subitem">
                             <?php
                             $conn = connect();
-                            $prd = $conn->query("SELECT * FROM category");
+                            $prd = $conn->query("SELECT * FROM category WHERE status = 1");
                             while ($row = $prd->fetch_assoc()) {
                                 echo "
                                     <a href='product.php?id={$row['categoryID']}#prd'>{$row['categoryName']}</a>
@@ -77,7 +77,7 @@ if (isset($_SESSION['notification'])) {
                             ?>
                         </div>
                     </div>
-                    <a href="contact.php">Contact Us</a>
+                    <a href="contact.php#ct">Contact Us</a>
                     <a href="gallery.php">Gallery</a>
                     <?php if (isset($_SESSION['login']) && $_SESSION['login'] === true) { ?>
                         <a href="logout.php"><?= $_SESSION['name'] ?>. LogOut</a>
@@ -86,12 +86,12 @@ if (isset($_SESSION['notification'])) {
                     <?php } ?>
                 </div>
                 <!-- Search  -->
-                <div id="search-box">
+                <!-- <div id="search-box">
                     <input type="text" name="search-text" placeholder="Type to search">
                     <a href="#" id="search-btn">
                         <i class="fas fa-search"></i>
                     </a>
-                </div>
+                </div> -->
 
             </div><!-- end nav-->
             <!-- Banner -->
