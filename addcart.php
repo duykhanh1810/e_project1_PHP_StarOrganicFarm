@@ -7,8 +7,8 @@ if (!isset($_SESSION['cart'])) {
 if (isset($_POST['itemId'])) {
     $count = count($_POST['itemId']); //count items sent by POST
     $cart = count($_SESSION['cart']); //count current items in cart
-    for ($j = 0; $j < $cart; $j++) { //loop through cart array and check if any item send by POST is exist in cart
-        $index = array_search($_SESSION['cart'][$j]['id'], $_POST['itemId']); //search on item id, return it index key
+    for ($j = 0; $j < $cart; $j++) { //loop through cart array and check if any item send by POST that existed in cart
+        $index = array_search($_SESSION['cart'][$j]['id'], $_POST['itemId']); //find the index key of existing item
         if ($index !== FALSE) {
             $duplicate[] = $index; //if found duplicate item, return all the index key into an array.
         }

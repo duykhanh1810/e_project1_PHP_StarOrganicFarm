@@ -52,7 +52,6 @@ function purchaseButtonClicked(e) {
     alert('follow 2 steps more to purchase your order!');
     }
 }
-
 /* update toltal */
 function updateTotal() {
     var cartProductTable = document.getElementById("cart-product");
@@ -72,5 +71,4 @@ function updateTotal() {
     total = Math.round(total * 100) / 100;
     /* update total value in html page*/
     document.getElementsByClassName("toltal-price")[0].innerText = "TOTAL: "+"$ " + total;
-
 }
