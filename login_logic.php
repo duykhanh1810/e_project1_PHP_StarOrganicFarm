@@ -17,7 +17,7 @@ if(isset($_POST['login'])){
                 $_SESSION['name'] = $user['customerName'];
                 $_SESSION['email'] = $user['customerEmail'];
             }
-            if(isset($_SESSION['cart'])){
+            if(isset($_SESSION['customerCart'])){
                 header ("location: customer-cart.php");
             } else {
                 header ("location: index.php");

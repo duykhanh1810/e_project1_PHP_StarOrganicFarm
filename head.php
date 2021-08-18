@@ -48,7 +48,7 @@
 
 
             <!-- Swiper -->
-            <!-- <div class="swiper-container" id="banner-slideshow">
+            <div class="swiper-container" id="banner-slideshow">
                 <div class="swiper-wrapper">
                     <div class="swiper-slide">
                         <div class="slide-img">
@@ -99,7 +99,7 @@
                 
                 <div class="swiper-button-next"></div>
                 <div class="swiper-button-prev"></div>
-            </div> -->
+            </div>
 
 
         </div>

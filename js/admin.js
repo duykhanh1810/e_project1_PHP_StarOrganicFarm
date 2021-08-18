@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     //Validate category, a provided category must be selected before submitting new product
     var ctg = document.querySelector('#ctg');
     document.querySelector('#addproduct').onsubmit = (event) => {
-        if (ctg.value === 'select...') {
+        if (ctg.value === '0') {
             event.preventDefault();
             alert('You must specify a category.');
             ctg.focus();

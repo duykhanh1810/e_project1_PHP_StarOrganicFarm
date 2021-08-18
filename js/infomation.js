@@ -9,7 +9,7 @@ function send(){
         alert("Please fill all fields or fill its correctly");
         return;
     }
-    if(isNaN(form_phone)){ //is not a number
+    if(!isNaN(form_phone)){ //is not a number
         alert("Phone must be a number");
         return;
     }

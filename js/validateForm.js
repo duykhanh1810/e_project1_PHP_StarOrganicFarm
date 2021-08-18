@@ -54,7 +54,7 @@ function validatePhone() {
 function emailTip() {
     var emailMsg = document.getElementById('email-msg');
     emailMsg.className = 'tip';
-    emailMsg.textContent = "Email must have \"@\" and \".com\"... ex: pink@gmail.com ";
+    emailMsg.textContent = "Email must have \"@\" and \".com\"... ex: C2011L@aptech.com ";
 }
 
 /* phone tips */

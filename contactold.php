@@ -1,6 +1,131 @@
 <?php
 session_start();
-include_once 'admin/adminFunction.php';
+require_once "admin/adminFunction.php";
+$conn = connect();
+?>
+<?php
+// Functions to filter user inputs
+function filterName($field){
+    // Làm sạch tên người dùng
+    $field = filter_var(trim($field), FILTER_SANITIZE_STRING);
+    
+    // Xác thực tên người dùng
+    if(filter_var($field, FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>"/^[a-zA-Z\s]+$/")))){
+        return $field;
+    } else{
+        return FALSE;
+    }
+}  
+function filtersurName($field){
+    // Làm sạch tên người dùng
+    $field = filter_var(trim($field), FILTER_SANITIZE_STRING);
+    
+    // Xác thực tên người dùng
+    if(filter_var($field, FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>"/^[a-zA-Z\s]+$/")))){
+        return $field;
+    } else{
+        return FALSE;
+    }
+}  
+function filterPhone($field){
+    // Làm sạch tên người dùng
+    $field = filter_var(trim($field), FILTER_SANITIZE_NUMBER_INT);
+    
+    // Xác thực Email
+    if(filter_var($field, FILTER_VALIDATE_INT)){
+        return $field;
+    } else{
+        return FALSE;
+    }
+}  
+function filterEmail($field){
+    // Làm sạch Email
+    $field = filter_var(trim($field), FILTER_SANITIZE_EMAIL);
+    
+    // Xác thực Email
+    if(filter_var($field, FILTER_VALIDATE_EMAIL)){
+        return $field;
+    } else{
+        return FALSE;
+    }
+}
+function filterString($field){
+    // Làm sạch nội dung
+    $field = filter_var(trim($field), FILTER_SANITIZE_STRING);
+    if(!empty($field)){
+        return $field;
+    } else{
+        return FALSE;
+    }
+}
+ 
+// Khai báo biến và khởi tạo các giá trị trống
+$nameErr = $surnameErr = $phoneErr = $emailErr = $messageErr = "";
+$name = $surname = $phone = $email = $subject = $message = "";
+ 
+// Xử lý dữ liệu biểu mẫu khi biểu mẫu được gửi
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+ 
+    // Xác thực tên người dùng
+    if(empty($_POST["name"])){
+        $nameErr = "Nhập tên của bạn.";
+    } else{
+        $name = filterName($_POST["name"]);
+        if($name == FALSE){
+            $nameErr = "Nhập tên hợp lệ.";
+        }
+    }
+
+    if(empty($_POST["surname"])){
+        $surnameErr = "Nhập tên của bạn.";
+    } else{
+        $surname = filtersurName($_POST["surname"]);
+        if($surname == FALSE){
+            $surnameErr = "Nhập tên hợp lệ.";
+        }
+    }
+
+    if(empty($_POST["phone"])){
+        $phoneErr = "Nhập phone của bạn.";
+    } else{
+        $phone = filterPhone($_POST["phone"]);
+        if($phone == FALSE){
+            $phoneErr = "Enter a valid phone number";
+            header("location:contact.php");
+            exit();
+        }
+    }
+    
+    // Xác thực Email
+    if(empty($_POST["email"])){
+        $emailErr = "Nhập địa chỉ Email.";     
+    } else{
+        $email = filterEmail($_POST["email"]);
+        if($email == FALSE){
+            $emailErr = "Enter a valid email";
+            header("location:contact.php");
+            exit();
+        }
+    }
+    
+    // Xác thực số điện thoại
+    // if(empty($_POST["subject"])){
+    //     $subject = "";
+    // } else{
+    //     $subject = filterString($_POST["subject"]);
+    // }
+    
+    // Xác thực nội dung
+    if(empty($_POST["message"])){
+        $messageErr = "Điền nhận xét.";     
+    } else{
+        $message = filterString($_POST["message"]);
+        if($message == FALSE){
+            $messageErr = "Điền nhận xét hợp lệ.";
+        }
+    }
+    
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -15,8 +140,8 @@ include_once 'admin/adminFunction.php';
     <script>
         var input = document.getElementById('form_message');
         input.oninvalid = function(event) {
-            event.target.setCustomValidity('Message should only contain lowercase letters. e.g. john');
-        }
+    event.target.setCustomValidity('Message should only contain lowercase letters. e.g. john');
+}
     </script>
     <!-- jquery cdn-->
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
@@ -44,7 +169,7 @@ include_once 'admin/adminFunction.php';
     <script src="js/toggleMenu.js"></script>
     <script src="js/DropMenu.js"></script>
     <script src="js/ScrollToTop.js"></script>
-    <script src="js/validateForm.js" async></script>
+    <!-- <script src="js/validateForm.js" async></script> -->
 </head>
 
 <body>
@@ -67,14 +192,12 @@ include_once 'admin/adminFunction.php';
                         <a href="#" id="drop">Product <span class="cheveron"></span></a>
                         <div class="subitem">
                             <?php
-                            $conn = connect();
                             $prd = $conn->query("SELECT * FROM category WHERE status = 1");
                             while ($row = $prd->fetch_assoc()) {
                                 echo "
                                     <a href='product.php?id={$row['categoryID']}#prd'>{$row['categoryName']}</a>
                                 ";
                             }
-                            $conn->close();
                             ?>
                         </div>
                     </div>
@@ -110,7 +233,7 @@ include_once 'admin/adminFunction.php';
                     <h1 class="contact_heading">Talk to us</h1>
                     <span class="separator"></span>
                     <h5 style="text-align:center">Do you need something specical? <br>Or you want to help us improve our services by providing your feedback? <br>Please let us know.</h5><br>
-                    <form id="contact-form" method="post" role="form" action="sendcontact.php">
+                    <form id="contact-form" method="post" role="form">
 
                         <div class="messages"></div>
 
@@ -120,14 +243,16 @@ include_once 'admin/adminFunction.php';
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="form_name">Firstname *</label>
-                                        <input id="form_name" type="text" name="name" class="form-control" placeholder="Please enter your firstname *" required="required" data-error="Firstname is required." value="<?=isset($_GET['fname'])? $_GET['fname'] : '' ?>">
+                                        <input id="form_name" type="text" name="name" class="form-control" placeholder="Please enter your firstname *" required="required" data-error="Firstname is required." value="<?php echo $name; ?>">
+                                        <span class="error"><?php echo $nameErr; ?></span>
                                         <div class="help-block with-errors"></div>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="form_lastname">Lastname *</label>
-                                        <input id="form_lastname" type="text" name="surname" class="form-control" placeholder="Please enter your lastname *" required="required" data-error="Lastname is required." value="<?=isset($_GET['lname'])? $_GET['lname'] : '' ?>">
+                                        <input id="form_lastname" type="text" name="surname" class="form-control" placeholder="Please enter your lastname *" required="required" data-error="Lastname is required." value="<?php echo $surname; ?>">
+                                        <span class="error"><?php echo $surnameErr; ?></span>
                                         <div class="help-block with-errors"></div>
                                     </div>
                                 </div>
@@ -136,14 +261,16 @@ include_once 'admin/adminFunction.php';
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="form_email">Email *</label>
-                                        <input id="form_email" type="email" name="email" class="form-control" placeholder="Please enter your email *" required="required" data-error="Valid email is required." value="<?=isset($_GET['email'])? $_GET['email'] : '' ?>" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
+                                        <input id="form_email" type="email" name="email" class="form-control" placeholder="Please enter your email *" required="required" data-error="Valid email is required." value="<?php echo $email; ?>" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
+                                        <span class="error"><?php echo $emailErr; ?></span>
                                         <div class="help-block with-errors"></div>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="form_phone">Phone *</label>
-                                        <input id="form_phone" type="tel" name="phone" class="form-control" required="required" placeholder="Please enter your phone *" data-error="Valid phone is required" value="<?=isset($_GET['phone'])? $_GET['phone'] : '' ?>">
+                                        <input id="form_phone" type="tel" name="phone" class="form-control" required="required" placeholder="Please enter your phone *" data-error="Valid phone is required" value="<?php echo $phone; ?>" >
+                                        <span class="error"><?php echo $phoneErr; ?></span>
                                         <div class="help-block with-errors"></div>
                                     </div>
                                 </div>
@@ -152,12 +279,13 @@ include_once 'admin/adminFunction.php';
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label for="form_message">Message *</label>
-                                        <textarea id="form_message" name="message" class="form-control" placeholder="Message for me *" rows="4" required="required" data-error="Please,leave us a message." pattern="[a-z]{1,15}"><?=isset($_GET['mess'])? $_GET['mess'] : '' ?></textarea>
+                                        <textarea id="form_message" name="message" class="form-control" placeholder="Message for me *" rows="4" required="required" data-error="Please,leave us a message." pattern="[a-z]{1,15}"><?php echo $message; ?></textarea>
+                                        <span class="error"><?php echo $messageErr; ?></span>
                                         <div class="help-block with-errors"></div>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
-                                    <input type="submit" name="ok" class="btn btn-success btn-send" value="Send message">
+                                    <input type="submit" name="ok" class="btn btn-success btn-send" value="Send message" onclick="send()">
                                 </div>
                             </div>
                             <div class="row">
@@ -167,8 +295,21 @@ include_once 'admin/adminFunction.php';
                                 </div>
                             </div>
                         </div>
-                    </form>
 
+                    </form>
+                    <?php
+                    if (isset($_POST['ok'])) {
+                        include_once 'function.php';
+                        $obj = new Contact();
+                        $res = $obj->contact_us($_POST);
+                        if ($res == true) {
+                            echo "<script>alert('Query successfully Submitted.Thank you')</script>";
+                        } else {
+                            echo "<script>alert('Something Went wrong!!')</script>";
+                        }
+                    }
+                    ?>
+                
                 </div><!-- /.8 -->
 
             </div> <!-- /.row-->
@@ -220,24 +361,3 @@ include_once 'admin/adminFunction.php';
 </body>
 
 </html>
-
-<?php
-if (isset($_SESSION['error'])) {
-    echo "<script>alert('Please check the following error(s):\\n";
-    foreach ($_SESSION['error'] as $value) {
-        echo " - " . $value . "\\n";
-    }
-    echo "')</script>";
-    unset($_SESSION['error']);
-}
-
-if(isset($_SESSION['success'])){
-    echo "<script>alert('{$_SESSION['success']}')</script>";
-    unset($_SESSION['success']);
-}
-
-if(isset($_SESSION['errDB'])){
-    echo "<script>alert('{$_SESSION['errDB']}')</script>";
-    unset($_SESSION['errDB']);
-}
-?>

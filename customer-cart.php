@@ -37,7 +37,7 @@ if (!isset($_SESSION['login'])) {
     <script src="js/toggleMenu.js"></script>
     <script src="js/DropMenu.js"></script>
     <script src="js/ScrollToTop.js"></script>
-    <script src="js/customer-cart.js" async></script>
+    <!-- <script src="js/customer-cart.js" async></script> -->
     <title>Cart</title>
 </head>
 
@@ -111,31 +111,54 @@ if (!isset($_SESSION['login'])) {
 
             <div id="cart" class="container">
                 <h2 class="cart-header">Cart <i class="fas fa-shopping-cart"></i></h2>
+                <h4 style='text-align:center'>Please take a few seconds to review your cart before checkout!</h4>
                 <span class="separator"></span>
                 <!-- cart product-->
                 <table class="table table-condensed" id="cart-product">
                     <thead>
                         <th>Product</th>
-                        <th class="text-center">Price</th>
+                        <th>Price</th>
                         <th>Quantity</th>
+                        <th>Subtotal</th>
                     </thead>
                     <tbody class="cart-items">
-
                         <?php
-                        require "cart.php";
+                        if (isset($_SESSION['customerCart'])) {
+                            foreach ($_SESSION['customerCart'] as $item) : ?>
+                                <tr class='cart-row'>
+                                    <td class='item-img'>
+                                        <img style="height: 60px;" src='<?= admin_findImg($item['id']) ?>' alt=''>
+                                        <span class='item-name'><?= $item['name'] ?></span>
+                                    </td>
+                                    <td>
+                                        <input type="hidden" class='price' value="<?= $item['price'] ?>">
+                                        $<span class='item-price'><?= $item['price'] ?></span>
+                                    </td>
+                                    <td>
+                                        <input style='max-width:50px' name='itemQuantity' type='number' min='1' step='1' value='<?= $item['qtt'] ?>' class='quantity-input' data-id='<?= $item['id'] ?>'>
+                                    </td>
+                                    <td>
+                                        <input type='hidden' value='<?= $item['subtotal'] ?>' class='subtotal'>
+                                        $<span class='visible-subtotal'><?= $item['subtotal'] ?></span>
+                                    </td>
+                                    <td>
+                                        <button data-id='<?= $item['id'] ?>' class='remove btn btn-danger'>Remove</button>
+                                    </td>
+                                </tr>
+                        <?php endforeach;
+                        }
                         ?>
-
                     </tbody>
                     <tfoot>
                         <tr class="total-row">
-                            <td class="toltal-price" colspan="2">TOTAL: $ <?= isset($_SESSION['total']) ? $_SESSION['total'] : 0 ?></td>
-                            <td><input type="hidden" name="total" id="" value='<?= isset($_SESSION['total']) ? $_SESSION['total'] : 0 ?>'></td>
+                            <td class="toltal-price" colspan="4">TOTAL: $<span id='sum'><?= isset($_SESSION['totalCart']) ? number_format($_SESSION['totalCart'],2) : '' ?></span></td>
+                            <td></td>
                         </tr>
                     </tfoot>
                 </table>
                 <div style="text-align:center">
                     <a href="product.php#prd" style="width:120px" class="btn btn-primary">Keep shopping</a>
-                    <a href="purchase.php" style="width:120px" class="btn btn-danger">Checkout</a>
+                    <a id='checkout' href="purchase.php" style="width:120px" class="btn btn-danger">Checkout</a>
                 </div>
             </div><!-- /cart container-->
         </div>
@@ -173,6 +196,7 @@ if (!isset($_SESSION['login'])) {
             },
         });
     </script>
+    <script src="js/addtocart.js"></script>
 </body>
 
 </html>
