@@ -36,6 +36,10 @@ if (isset($_POST['ok'])) {
         $error['phone'] = 'Invalid phone number.';
         $phone = '';
     }
+    if(strlen($phone) < 10) {
+        $error['phone'] = 'Phone number must be atleast 10 digits.';
+        $phone = '';
+    }
 
     if(count($error)>0){
         $_SESSION['error'] = array();

@@ -30,7 +30,8 @@
                     <a href="contact.php#ct">Contact Us</a>
                     <a href="gallery.php">Gallery</a>
                     <?php if (isset($_SESSION['login']) && $_SESSION['login'] === true) { ?>
-                        <a href="logout.php"><?= $_SESSION['name'] ?>. LogOut</a>
+                        <a href='useraccount.php'><i class="fas fa-user"></i>Account</a>
+                        <a href="logout.php"><i class="fas fa-power-off"></i>LogOut</a>
                     <?php } else { ?>
                         <a href="login.php#page-title">Login</a>
                     <?php } ?>

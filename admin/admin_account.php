@@ -18,27 +18,32 @@
                     </div>
                     <div class="col">
                         <label for="email">Email:</label>
+                        <input type="hidden" id='hidden-email' value="<?=isset($userInfo)?$userInfo->email:''?>">
                         <input id='email' name="email" type="text" class='form-control' value="<?=isset($userInfo)?$userInfo->email:''?>">
+                        <i><small id='errEmail' style="color:red"></small></i>
                     </div>
                 </div>
                 <div class="row mb-3">
                     <div class="col">
                         <label for="oldpass">Old password:</label>
-                        <input name='oldpass' type="password" class='form-control'>
+                        <input id='oldpass' name='oldpass' type="password" class='form-control'>
+                        <i><small id='errOldPass' style="color:red"></small></i>
                     </div>
                     <div class="col">
                         <label for="newpass">New password:</label>
-                        <input name='newpass' type="password" class='form-control'>
+                        <input id='newpass' name='newpass' type="password" class='form-control'>
+                        <i><small id='errNewPass' style="color:red"></small></i>
                     </div>
                     <div class="col">
                         <label for="repass">Confirm password:</label>
-                        <input name='repass' type="password" class='form-control'>
+                        <input id='repass' name='repass' type="password" class='form-control'>
+                        <i><small id='errRePass' style="color:red"></small></i>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col" style="text-align:center">
-                        <input style="width:200px" type="submit" value="Change Email" name="upemail" class="btn btn-primary">
-                        <input style="width:200px" type="submit" value="Change Password" name="uppass" class="btn btn-warning">
+                        <input id='change-email' style="width:200px" type="submit" value="Change Email" name="upemail" class="btn btn-primary">
+                        <input id='change-pass' style="width:200px" type="submit" value="Change Password" name="uppass" class="btn btn-warning">
                     </div>
                 </div>
             </div>
@@ -47,6 +52,30 @@
     </div>
     <hr>
 </div>
+<script>
+    $('#change-email').on('click', function(e){
+        if($('#hidden-email').val() == $('#email').val()){
+            e.preventDefault();
+            $('#errEmail').text('Nothing changes!');
+        }
+    })
+
+    $('#change-pass').on('click', function(e){
+            if($('#oldpass').val() == ''){
+                e.preventDefault();
+                $('#errOldPass').text('Please enter your old password.');
+            }
+            if($('#newpass').val() == '' || $('#repass').val()==''){
+                e.preventDefault();
+                $('#errNewPass').text('Please enter your new password.');
+                $('#errRePass').text('Please re-enter your new password.');
+            }
+            if($('#newpass').val() != $('#repass').val()){
+                e.preventDefault();
+                $('#errRePass').text('Re-type password mismatched.');
+            }
+        })
+</script>
 </div>
 <?php
 if (isset($_SESSION['error'])) {
