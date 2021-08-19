@@ -34,15 +34,10 @@ function adminLogin($userName, $password)
     return $login;
 }
 
-function admin_AddProduct($name, $price, $detail, $category, $imgURL)
+function admin_AddProduct($name, $price, $detail, $categoryID, $imgURL)
 {
     $conn = connect();
-    //find catergoryID:
-    $sql = "SELECT categoryID FROM category WHERE categoryName = '$category'";
-    $result = $conn->query($sql);
-    while ($row = $result->fetch_assoc()) {
-        $categoryID = $row['categoryID'];
-    }
+    
     //Check if product name exist:
     $checkPName = $conn->query("SELECT productName FROM product WHERE productName = '$name'");
     if ($checkPName->num_rows > 0) {
@@ -50,7 +45,6 @@ function admin_AddProduct($name, $price, $detail, $category, $imgURL)
         return $error;
     } else {
         //insert product:
-        // $sql = "CALL addProduct('$name', '$price', '$detail', '$categoryID', '$imgURL')";
         $sql = "INSERT INTO product (productName, unitPrice, productDetail, categoryID, imgURL) VALUES (?,?,?,?,?)";
         $stm = $conn->prepare($sql);
         $stm->bind_param("sssis", $name, $price, $detail, $categoryID, $imgURL);
@@ -134,13 +128,7 @@ function admin_updateProduct($pid, $pname, $price, $category, $detail, $imgURL, 
 {
     $conn = connect();
     $error = [];
-    //find category ID:
-    $category = $conn->real_escape_string($category);
-    $find_cid = $conn->query("SELECT categoryID FROM category WHERE categoryName = '$category'");
-    while ($row = $find_cid->fetch_assoc()) {
-        $cid = $row['categoryID'];
-    }
-
+        
     //validate name:
     if (empty($pname)) {
         $error['name'] = "You must enter a product name.";
@@ -174,7 +162,7 @@ function admin_updateProduct($pid, $pname, $price, $category, $detail, $imgURL, 
         if (empty($imgURL)) {
             $sql = "UPDATE product SET productName = ?, unitPrice = ?, categoryID = ?, productDetail = ?, `status` = ? WHERE productID = ?";
             $stm = $conn->prepare($sql);
-            $stm->bind_param("sdisii", $pname, $price, $cid, $detail, $status, $pid);
+            $stm->bind_param("sdisii", $pname, $price, $category, $detail, $status, $pid);
             $stm->execute();
             $stm->close();
         } else { //if change image:
@@ -188,7 +176,7 @@ function admin_updateProduct($pid, $pname, $price, $category, $detail, $imgURL, 
             //update record:
             $sql = "UPDATE product SET productName = ?, unitPrice = ?, categoryID = ?, productDetail = ?, imgURL = ?, `status` = ? WHERE productID = ?";
             $stm = $conn->prepare($sql);
-            $stm->bind_param("sdissii", $pname, $price, $cid, $detail, $imgURL, $status, $pid);
+            $stm->bind_param("sdissii", $pname, $price, $category, $detail, $imgURL, $status, $pid);
             $stm->execute();
             $stm->close();
         }

@@ -38,6 +38,7 @@ if (!isset($_SESSION['login'])) {
     <script src="js/DropMenu.js"></script>
     <script src="js/ScrollToTop.js"></script>
     <!-- <script src="js/customer-cart.js" async></script> -->
+    
     <title>Cart</title>
 </head>
 
@@ -72,7 +73,8 @@ if (!isset($_SESSION['login'])) {
                     <a href="contact.php">Contact Us</a>
                     <a href="gallery.php">Gallery</a>
                     <?php if (isset($_SESSION['login']) && $_SESSION['login'] === true) { ?>
-                        <a href="logout.php"><?= $_SESSION['name'] ?>. LogOut</a>
+                        <a href='useraccount.php'><i class="fas fa-user"></i>Account</a>
+                        <a href="logout.php"><i class="fas fa-power-off"></i>LogOut</a>
                     <?php } else { ?>
                         <a href="login.php#page-title">Login</a>
                     <?php } ?>
@@ -151,7 +153,7 @@ if (!isset($_SESSION['login'])) {
                     </tbody>
                     <tfoot>
                         <tr class="total-row">
-                            <td class="toltal-price" colspan="4">TOTAL: $<span id='sum'><?= isset($_SESSION['totalCart']) ? number_format($_SESSION['totalCart'],2) : '' ?></span></td>
+                            <td class="toltal-price" colspan="4">TOTAL: $<span id='sum'><?= isset($_SESSION['totalCart']) ? number_format($_SESSION['totalCart'], 2) : '' ?></span></td>
                             <td></td>
                         </tr>
                     </tfoot>

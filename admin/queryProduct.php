@@ -8,6 +8,7 @@ if ($_REQUEST['product']) {
         INNER JOIN category as ct ON pd.categoryID = ct.categoryID 
         WHERE pd.productID = '$pid'";
     $result = $conn->query($sql);
+
     while ($row = $result->fetch_assoc()) { //get the category name of the selected product
         $ct = $row['categoryName'];
         $currentStat = $row['status'];
@@ -28,14 +29,14 @@ if ($_REQUEST['product']) {
     }
 
    //find all category and exclude the selected product's category
-    $list = $conn->query("SELECT categoryName FROM category WHERE categoryName NOT LIKE '$ct'");
+    $list = $conn->query("SELECT categoryID, categoryName FROM category WHERE categoryName NOT LIKE '$ct'");
 
     //store all <option> tags with categories in a variable
     if ($list->num_rows > 0) {
         $cOption = '';
         $sOption = '';
         while ($item = $list->fetch_assoc()) {
-            $cOption .= "<option value='{$item['categoryName']}'>{$item['categoryName']}</option>";
+            $cOption .= "<option value='{$item['categoryID']}'>{$item['categoryName']}</option>";
         }
     }
     //store status in a variable
@@ -60,7 +61,7 @@ if ($_REQUEST['product']) {
                     <input type='text' style='max-width:10%' id='price' class='form-control' name='price' aria-label='price' value='{$row['unitPrice']}' required>
                     <span class='input-group-text'>Category:</span>
                     <select class='form-select' name='category' id='ctg'>
-                        <option value='{$row['categoryName']}' >{$row['categoryName']}</option>
+                        <option value='{$row['categoryID']}' >{$row['categoryName']}</option>
                         {$cOption}
                     </select>
                     <span class='input-group-text'>Status:</span>

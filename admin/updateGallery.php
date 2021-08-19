@@ -11,7 +11,7 @@ if (isset($_SESSION['errUpdate'])) {
     unset($_SESSION['errUpdate']);
 }
 if(isset($_POST['add'])){
-    if($_FILES['picture']['name'] === NULL){
+    if($_FILES['picture']['name'] == ''){
         $_SESSION['error'] = "You must choose an image";
         header("location: admin_panel.php?page=gallery");
     } else {

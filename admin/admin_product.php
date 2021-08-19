@@ -5,23 +5,23 @@
         <form id="addproduct" action="addProduct.php" method="post" enctype="multipart/form-data">
             <div class="input-group mb-1">
                 <span class="input-group-text" style="max-width:20%">Product name:</span>
-                <input type="text" id="pname" class="form-control" name="pname" placeholder="" aria-label="pname" required>
+                <input type="text" id="pname" class="form-control" name="pname" placeholder="" aria-label="pname" required value="<?= isset($_GET['pname']) ? $_GET['pname'] : ''  ?>">
 
                 <!-- <input type="button" value="New Category" class="form-control btn btn-secondary"> -->
             </div>
             <div class="input-group mb-3">
                 <span class="input-group-text" style="max-width:15%">Unit price:</span>
                 <span class="input-group-text" style="max-width:5%"><i class="fa fa-usd" aria-hidden="true"></i></span>
-                <input type="text" id="price" class="form-control" name="price" placeholder="" aria-label="price" required>
+                <input type="text" id="price" class="form-control" name="price" placeholder="" aria-label="price" required value="<?= isset($_GET['price']) ? $_GET['price'] : ''  ?>">
                 <span class="input-group-text">Category:</span>
                 <select class="form-select" name="category" id="ctg">
-                    <option value="select...">select...</option>
+                    <option value="0">select...</option>
                     <?php
                     $conn = connect();
-                    $list = $conn->query("SELECT categoryName FROM category");
+                    $list = $conn->query("SELECT categoryID, categoryName FROM category");
                     if ($list->num_rows > 0) {
                         while ($item = $list->fetch_assoc()) {
-                            echo "<option value=\"{$item['categoryName']}\">{$item['categoryName']}</option>";
+                            echo "<option value=\"{$item['categoryID']}\">{$item['categoryName']}</option>";
                         }
                     }
                     $conn->close();

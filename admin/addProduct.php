@@ -12,7 +12,7 @@ if (isset($_POST['add'])) {
         $_SESSION['error'] = "You must enter product name.";
         header("location: admin_panel.php?page=product");
     }
-    if ($_POST['category'] === 'select...') {
+    if ($_POST['category'] == 0) {
         $_SESSION['error'] = "You must choose a category.";
         header("location: admin_panel.php?page=product&pname={$_POST['pname']}");
     }
@@ -20,7 +20,7 @@ if (isset($_POST['add'])) {
         $_SESSION['error'] = "You must enter unit price for the product.";
         header("location: admin_panel.php?page=product&pname={$_POST['pname']}&category={$_POST['category']}");
     }
-    if ($_FILES['avatar']['name'] === NULL) {
+    if ($_FILES['avatar']['name'] == '') {
         $_SESSION['error'] = "You must choose a picture for the product.";
         header("location: admin_panel.php?page=product&pname={$_POST['pname']}&category={$_POST['category']}&price={$_POST['price']}");
     } else {

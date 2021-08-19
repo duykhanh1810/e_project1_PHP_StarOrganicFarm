@@ -49,6 +49,9 @@ $cus = $result->fetch_object();
             window.history.replaceState(null, null, location.href);
         }
     </script>
+    <style>
+        body{min-height: 100vh;}
+    </style>
     <title>Customer's User Account</title>
 </head>
 
@@ -265,7 +268,7 @@ $cus = $result->fetch_object();
         $('#pass').on('click', function(e){
             if($('#oldpass').val() == ''){
                 e.preventDefault();
-                $('#errOldPass').text('Please confirm changing password by entering your old one.');
+                $('#errOldPass').text('Please confirm your current password.');
             }
             if($('#newpass').val() == '' || $('#repass').val()==''){
                 e.preventDefault();
