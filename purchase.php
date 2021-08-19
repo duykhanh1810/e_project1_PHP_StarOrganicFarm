@@ -158,18 +158,7 @@
                 </div><!-- /row-->
             </div>
             <!--/main-->
-        </div>
-        <!--/content-->
-        <div id="foot">
-            <div id="copyrights">
-                Copyright &copy 2021. All rights reserved by Brothers In Farm.
-            </div>
-            <div id="social-media">
-                <a href="#"><i class="fab fa-facebook"></i></a>
-                <a href="#"><i class="fab fa-twitter"></i></a>
-                <a href="#"><i class="fab fa-instagram"></i></a>
-            </div>
-        </div><!-- /foot-->
+        <?php include 'footer.php' ?>
     </div><!-- /page-->
 
 

@@ -24,7 +24,7 @@ $cus = $result->fetch_object();
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
     <!-- Bootstrap-->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    
+
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <!-- font awesome-->
     <link rel="stylesheet" href="vendor/fontawesome/css/all.css">
@@ -50,7 +50,9 @@ $cus = $result->fetch_object();
         }
     </script>
     <style>
-        body{min-height: 100vh;}
+        body {
+            min-height: 100vh;
+        }
     </style>
     <title>Customer's User Account</title>
 </head>
@@ -99,7 +101,7 @@ $cus = $result->fetch_object();
         <div id="content">
             <div id="general-title">
                 <h2 id="prd">User account</h2>
-                <h4>Welcome, <?=$_SESSION['name']?></h4>
+                <h4>Welcome, <?= $_SESSION['name'] ?></h4>
                 <span class="separator"></span>
             </div>
             <div id="account" class="container" style="width:50%">
@@ -108,16 +110,16 @@ $cus = $result->fetch_object();
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="email">Your email:</label>
-                                <input type="hidden" id='hidden-email' value="<?=isset($_SESSION['cid'])?$cus->customerEmail:''?>">
-                                <input type="email" name="email" id="email" class="form-control" placeholder="" aria-describedby="helpId" value="<?=isset($_SESSION['cid'])?$cus->customerEmail:''?>">
+                                <input type="hidden" id='hidden-email' value="<?= isset($_SESSION['cid']) ? $cus->customerEmail : '' ?>">
+                                <input type="email" name="email" id="email" class="form-control" placeholder="" aria-describedby="helpId" value="<?= isset($_SESSION['cid']) ? $cus->customerEmail : '' ?>">
                                 <small style="color:red" id="errEmail" class="text-muted"></small>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="email">Your phone number:</label>
-                                <input type="hidden" id='hidden-phone' value="<?=isset($_SESSION['cid'])?$cus->customerPhone:''?>">
-                                <input type="text" name="phone" id="phone" class="form-control" placeholder="" aria-describedby="helpId" value="<?=isset($_SESSION['cid'])?$cus->customerPhone:''?>">
+                                <input type="hidden" id='hidden-phone' value="<?= isset($_SESSION['cid']) ? $cus->customerPhone : '' ?>">
+                                <input type="text" name="phone" id="phone" class="form-control" placeholder="" aria-describedby="helpId" value="<?= isset($_SESSION['cid']) ? $cus->customerPhone : '' ?>">
                                 <small style="color:red" id="errPhone" class="text-muted"></small>
                             </div>
                         </div>
@@ -180,14 +182,14 @@ $cus = $result->fetch_object();
                     </thead>
                     <tbody>
                 ";
-                while($order = $query->fetch_assoc()){ ?>
-                    <tr class='vieworder' data-toggle='modal' data-target='#orderDetail' data-id="<?=$order['orderID']?>">
-                        <td><?=$order['orderTime']?></td>
-                        <td><?=$order['dAdd']?></td>
-                        <td><?=$order['phone']?></td>
-                        <td>$<?=$order['orderValue']?></td>
-                        <td><?=$order['orderStatus']?></td>
-                        
+                while ($order = $query->fetch_assoc()) { ?>
+                    <tr class='vieworder' data-toggle='modal' data-target='#orderDetail' data-id="<?= $order['orderID'] ?>">
+                        <td><?= $order['orderTime'] ?></td>
+                        <td><?= $order['dAdd'] ?></td>
+                        <td><?= $order['phone'] ?></td>
+                        <td>$<?= $order['orderValue'] ?></td>
+                        <td><?= $order['orderStatus'] ?></td>
+
                     </tr>
                 <?php  }
                 echo "</tbody></table>";
@@ -212,26 +214,14 @@ $cus = $result->fetch_object();
             </div>
         </div>
     </div>
-    <!--end content div-->
-    <div id="foot">
-        <div id="copyrights">
-            Copyright & copy <?= date("Y") ?>. All rights reserved by Brothers In Farm
-        </div>
-        <div id="social-media">
-            <a href="http://fb.com"><i class="fab fa-facebook-square"></i></a>
-            <a href="http://instagram.com"><i class="fab fa-instagram"></i></a>
-            <a href="http://twitter.com"><i class="fab fa-twitter-square"></i></a>
-        </div>
-    </div>
-    <!--End foot div-->
-    </div>
+    <?php include 'footer.php' ?>
     <!-- end page div-->
 </body>
 
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         //sending requess
-        $('.vieworder').on('click', function(){
+        $('.vieworder').on('click', function() {
             var orderID = $(this).attr('data-id');
             $.ajax({
                 url: 'orderDetail.php',
@@ -239,42 +229,41 @@ $cus = $result->fetch_object();
                 data: {
                     order: orderID
                 },
-                success: function(data){
+                success: function(data) {
                     $('#order-detail').html(data);
                 }
             })
         })
 
         //button click event:
-        $('#info').on('click', function(e){
-            if($('#email').val() == $('#hidden-email').val()){
-                e.preventDefault();
-                $('#errEmail').text('No email change.');
+        $('#info').on('click', function(e) {
+            if ($('#email').val() == $('#hidden-email').val()) {
+                if ($('#phone').val() == $('#hidden-phone').val()) {
+                    e.preventDefault();
+                    $('#errEmail').text('Nothing change.');
+                    $('#errPhone').text('Nothing change.');
+                }
             }
-            if($('#phone').val() == $('#hidden-phone').val()){
-                e.preventDefault();
-                $('#errPhone').text('No phone number change.');
-            }
-            if($('#email').val() == ''){
+            if ($('#email').val() == '') {
                 e.preventDefault();
                 $('#errEmail').text('Your email is required.');
             }
-            if($('#phone').val() == ''){
+            if ($('#phone').val() == '') {
                 e.preventDefault();
                 $('#errPhone').text('Your phone is required.');
             }
         })
 
-        $('#pass').on('click', function(e){
-            if($('#oldpass').val() == ''){
+        $('#pass').on('click', function(e) {
+            if ($('#oldpass').val() == '') {
                 e.preventDefault();
                 $('#errOldPass').text('Please confirm your current password.');
             }
-            if($('#newpass').val() == '' || $('#repass').val()==''){
+            if ($('#newpass').val() == '' || $('#repass').val() == '') {
                 e.preventDefault();
                 $('#errNewPass').text('Please enter your new password and re-type it.');
             }
-            if($('#newpass').val() != $('#repass').val()){
+            if ($('#newpass').val() != $('#repass').val()) {
                 e.preventDefault();
                 $('#errRePass').text('Re-type password mismatched.');
             }
@@ -292,16 +281,15 @@ if (isset($_SESSION['error'])) {
     unset($_SESSION['error']);
 }
 
-if(isset($_SESSION['success'])){
+if (isset($_SESSION['success'])) {
     echo "<script>alert('{$_SESSION['success']}')</script>";
     unset($_SESSION['success']);
 }
 
-if(isset($_SESSION['errDB'])){
+if (isset($_SESSION['errDB'])) {
     echo "<script>alert('{$_SESSION['errDB']}')</script>";
     unset($_SESSION['errDB']);
 }
 ?>
-
 </html>
 <?php $conn->close(); ?>

@@ -17,14 +17,8 @@ if (isset($_POST['create'])) {
     if ($result === true) {
         $_SESSION['success'] = 'New category created.';
     } else {
-        $_SESSION['error2'] = $result;
+        $_SESSION['errUpdate'] = $result;
     }
-}
-if(isset($_SESSION['page'])){
-    if($_SESSION['page'] === 'product') {
-        header("location: admin_product.php");
-    } else {
-        header("location: admin_category.php");
-    }
+    header("location: admin_panel.php?page=category");
 }
 ?>

@@ -10,7 +10,7 @@
     <h2>Your account profile</h2>
     <div class="user info">
         <form id="useraccount" action="updateAccount.php" method="post">
-            <div class="container" style="width:60%">
+            <div class="container" style="width:70%">
                 <div class="row mb-3">
                     <div class="col">
                         <label for="name">Username:</label>
