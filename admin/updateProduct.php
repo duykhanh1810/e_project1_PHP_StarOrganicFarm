@@ -33,7 +33,7 @@ if (isset($_POST['save'])) {
             $errorImg = 0;
             $pathUpload = "../imgs/";
             $path = "imgs/";
-            $fileName = $file['name'];
+            $fileName = uniqid().$file['name']; //generate an unique name for the file uploaded
             $tmp_name = $file['tmp_name'];
             move_uploaded_file($tmp_name, $pathUpload . $fileName);
             $imgURL = $path . $fileName;

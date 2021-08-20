@@ -38,8 +38,7 @@ $(document).ready(function () {
 
     /*change item quantity in the cart array: 
     This function triggers on the event when user change the quantity input of each product in cart
-    It should be triggered on document scale, since the 'cart-item' element which contain the 'quantity-input' is dymanically added 
-    after the page is loaded.
+    It should be triggered on document scale, since the 'cart-item' element which contain the 'quantity-input' is dymanically added after the page is loaded.
     */
     $(document).on('input', '.quantity-input', function () {
         updateCart(); //Call function to calculate value of the cart each time user change the quantity

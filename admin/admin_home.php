@@ -95,11 +95,10 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body" id="order-detail">
-                        <!-- query.php fetchs data here -->
+                        <!-- ajax jquery fetching data here -->
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <!-- <input type="submit" value="Save changes" name="save" class="btn btn-primary"> -->
                     </div>
                 </div>
             </div>

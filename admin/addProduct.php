@@ -39,7 +39,7 @@ if (isset($_POST['add'])) {
             $file = $_FILES['avatar'];
             $pathUpload = "../imgs/";
             $path = "imgs/";
-            $fileName = $file['name'];
+            $fileName = uniqid().$file['name'];
             $tmp_name = $file['tmp_name'];
             move_uploaded_file($tmp_name, $pathUpload.$fileName);
             $imgURL = $path.$fileName;
