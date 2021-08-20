@@ -5,36 +5,43 @@
             ?>
             <div class="content">
                 <h2>Gallery</h2>
-                <div class="gallery add" id="addgallery">
-                    <h4>Add to Gallery</h4>
-                    <form action="updateGallery.php" method="post" enctype="multipart/form-data">
-                        <div class="input-group mb-1">
-                            <span class="input-group-text">Category:</span>
-                            <select class="form-select" name="category" id="ctg" style="max-width:20%">
-                                <option value="select...">select...</option>
-                                <?php
-                                foreach ($catList as $value) {
-                                    echo "<option value='{$value['category']}'>{$value['category']}</option>";
-                                }
-                                ?>
-                            </select>
+                <div class="row">
+                    <div class="col-8">
+                        <div class="add-gallery" id="addgallery">
+                            <h4>Add to Gallery</h4>
+                            <form action="updateGallery.php" method="post" enctype="multipart/form-data">
+                                <div class="input-group mb-1">
+                                    <span class="input-group-text">Category:</span>
+                                    <select class="form-select" name="category" id="ctg">
+                                        <option value="select...">select...</option>
+                                        <?php
+                                        foreach ($catList as $value) {
+                                            echo "<option value='{$value['category']}'>{$value['category']}</option>";
+                                        }
+                                        ?>
+                                    </select>
 
-                            <input style="max-width:30%" type="file" class="form-control" id="customFile" name="picture" accept="image/*" onchange="loadFile(event);" />
+                                    <input type="file" class="form-control" id="customFile" name="picture" accept="image/*" onchange="loadFile(event);" />
+                                </div>
+
+                                <!-- image upload -->
+                                <!-- submit -->
+                                <div class="submit input-group mb3">
+                                    <input class="btn-add btn btn-primary" type="submit" value="Add" name="add" id="add">
+                                    <!-- <button class="btn-add btn btn-danger" type="reset" id="reset">Reset</button> -->
+                                </div>
+                            </form>
                         </div>
-                        
-                        <!-- image upload -->
-                        <!-- submit -->
-                        <div class="submit input-group mb3">
-                            <input class="btn-add btn btn-primary" type="submit" value="Add" name="add" id="add">
-                            <!-- <button class="btn-add btn btn-danger" type="reset" id="reset">Reset</button> -->
+                    </div>
+                    <div class="col-4">
+                        <div id='preview-img' style="display:none;">
+                            <p><small>Preview:</small></p>
+                            <img id='preview' style='height:150px'>
                         </div>
-                        <div style='display:none; padding-top:2px' id='preview-img'>
-                            <p>Preview:</p>
-                            <img id='preview' style='height:100px'>
-                        </div>
-                    </form>
+                    </div>
                 </div>
-                
+
+
                 <hr>
 
                 <div class="gallery list">
@@ -104,9 +111,9 @@
                 function loadFile(e) {
                     var img = document.querySelector('#preview');
                     var preview = document.querySelector('#preview-img');
-                    preview.style.display='block';
+                    preview.style.display = 'block';
                     img.src = URL.createObjectURL(e.target.files[0]);
-                    img.onload = ()=>{
+                    img.onload = () => {
                         URL.revokeObjectURL(img.src);
                     }
                 }
