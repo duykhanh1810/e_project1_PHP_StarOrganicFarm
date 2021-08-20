@@ -3,6 +3,7 @@ require 'adminFunction.php';
 $conn = connect();
 if ($_REQUEST['product']) {
     $pid = $_REQUEST['product'];
+    $pid = $conn->real_escape_string($pid);
     $sql = "SELECT pd.productID, pd.imgURL, pd.productID, pd.productName, pd.categoryID, ct.categoryName, pd.productDetail, pd.unitPrice, pd.status
         FROM product as pd 
         INNER JOIN category as ct ON pd.categoryID = ct.categoryID 

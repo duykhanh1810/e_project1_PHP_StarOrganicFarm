@@ -1,7 +1,7 @@
 <div class="content">
     <h2>Dashboard</h2>
-    <div class='row container justify-content-center'>
-        <div class="col ">
+    <div class='row' style="padding-left: 10px;padding-right: 10px;">
+        <div class="col-3">
             <div class="stat-user">
                 <div class="text">
                     Customer
@@ -12,7 +12,7 @@
                 </div>
             </div>
         </div>
-        <div class="col">
+        <div class="col-3">
             <div class="stat-lsale">
                 <div class="text">
                     This week orders
@@ -23,7 +23,7 @@
                 </div>
             </div>
         </div>
-        <div class="col">
+        <div class="col-3">
             <div class="stat-csale">
                 <div class="text">
                     Today Sale
@@ -33,7 +33,7 @@
                 </div>
             </div>
         </div>
-        <div class="col">
+        <div class="col-3">
             <div class="stat-total">
                 <div class="text">
                     Total Sale

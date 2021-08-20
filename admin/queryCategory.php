@@ -8,7 +8,8 @@ require 'adminFunction.php';
 $conn = connect();
 if (isset($_REQUEST['ctg'])) {
     $id = $_REQUEST['ctg'];
-    $sql = "SELECT * FROM category WHERE categoryID = $id";
+    $id = $conn->real_escape_string($id);
+    $sql = "SELECT * FROM category WHERE categoryID = '$id'";
     $data = '';
     $ctg = $conn->query($sql);
     $ctgValue = $ctg->fetch_object();

@@ -4,7 +4,7 @@ $currentID = $_SESSION['account']['userID']; //the id of current logged in user
 require 'adminFunction.php';
 $conn = connect();
 if (isset($_POST['user'])) {
-    $uID = $_POST['user'];
+    $uID = $conn->real_escape_string($_POST['user']);
     $sql = "SELECT s.staffID, s.userName, s.status, sr.roleName, sr.roleDetail, s.email, s.status, s.roleID
     FROM staff as s INNER JOIN staffrole as sr ON s.roleID = sr.roleID
     WHERE s.staffID = '$uID'";

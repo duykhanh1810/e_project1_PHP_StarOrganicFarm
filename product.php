@@ -9,22 +9,31 @@ if (isset($_GET['id'])) {
 
 if (isset($_POST['search-text'])) {
     $search = filter_var($_POST['search-text'], FILTER_SANITIZE_STRING);
-    $product = $conn->query("SELECT * FROM product
-        INNER JOIN category ON product.categoryID = category.categoryID
-        WHERE product.productName LIKE CONCAT('%','$search','%') 
-        OR category.categoryName LIKE CONCAT('%','$search','%')
-        AND product.status = 1 AND category.status = 1
-        ");
+    $sql = "SELECT * FROM product
+    INNER JOIN category ON product.categoryID = category.categoryID
+    WHERE product.productName LIKE CONCAT('%',?,'%') 
+    OR category.categoryName LIKE CONCAT('%',?,'%')
+    AND product.status = 1 AND category.status = 1
+    ";
+    $stm = $conn->prepare($sql);
+    $stm->bind_param("ss", $search, $search);
+    $stm->execute();
+    $product = $stm->get_result();
+    $stm->close();
 } else {
-    $product = $conn->query("SELECT * FROM product 
+    $sql = "SELECT * FROM product 
     INNER JOIN category ON product.categoryID = category.categoryID 
-    WHERE product.categoryID = '$id' AND product.status = 1 AND category.status = 1");
+    WHERE product.categoryID = ? AND product.status = 1 AND category.status = 1";
+    $stm = $conn->prepare($sql);
+    $stm->bind_param("s", $id);
+    $stm->execute();
+    $product = $stm->get_result();
+    $stm->close();
 }
 
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

@@ -462,7 +462,12 @@ function admin_displayCategory()
 function admin_getCategoryName($id)
 {
     $conn = connect();
-    $result = $conn->query("SELECT categoryName FROM category WHERE categoryID = '$id'");
+    $sql = "SELECT categoryName FROM category WHERE categoryID = ?";
+    $stm = $conn->prepare($sql);
+    $stm->bind_param("s", $id);
+    $stm->execute();
+    $result = $stm->get_result();
+    $stm->close();
     if ($result->num_rows > 0) {
         foreach ($result as $value) {
             $name = $value['categoryName'];
@@ -480,7 +485,7 @@ function admin_addCategory($cname, $cunit, $detail)
     if (empty($cname)) {
         $error['name'] = 'You must enter a name for the new category';
     }
-    if (!preg_match('/^[a-zA-Z0-9-_]*$/', $cname)) {
+    if (!preg_match('/^[a-zA-Z0-9-_ ]*$/', $cname)) {
         $error['name'] = 'Name must contain only alphanumeric character.';
     }
     $check_sql = "SELECT * FROM category WHERE categoryName = ?";
