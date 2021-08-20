@@ -34,6 +34,7 @@ if (isset($_POST['search-text'])) {
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -119,56 +120,56 @@ if (isset($_POST['search-text'])) {
         <div id="cart" class="container">
             <h2 class="cart-header">Cart <i class="fas fa-cart-arrow-down"></i></h2>
             <!-- <form id='cart-submit' action="addcart.php" method="post"> -->
-                <span class="separator"></span>
-                <!-- cart product-->
-                <table class="table table-condensed" id="cart-product">
-                    <thead>
-                        <tr>
-                            <th>Product</th>
-                            <th>Price</th>
-                            <th>Quantity</th>
-                            <th>Subtotal</th>
-                            <th>Remove</th>
-                        </tr>
-                    </thead>
-                    <tbody class="cart-items">
-                        <?php
-                        if (isset($_SESSION['customerCart'])) {
-                            foreach ($_SESSION['customerCart'] as $item) : ?>
-                                <tr class='cart-row'>
-                                    <td class='item-img'>
-                                        <img style="height: 80px; width:100px" src='<?=admin_findImg($item['id'])?>' alt=''>
-                                        <span class='item-name'><?=$item['name']?></span>
-                                    </td>
-                                    <td>
-                                        <input type="hidden" class='price' value="<?=$item['price']?>">
-                                        $<span class='item-price'><?=$item['price']?></span>
-                                    </td>
-                                    <td>
-                                        <input style='max-width:50px' name='itemQuantity' type='number' min='1' step='1' value='<?=$item['qtt']?>' class='quantity-input' data-id='<?=$item['id']?>'>
-                                    </td>
-                                    <td>
-                                        <input type='hidden' value='<?=$item['subtotal']?>' class='subtotal'>
-                                        $<span class='visible-subtotal'><?=$item['subtotal']?></span>
-                                    </td>
-                                    <td>
-                                        <button data-id='<?=$item['id']?>' class='remove btn btn-danger'>Remove</button>
-                                    </td>
-                                </tr>
-                        <?php endforeach;
-                        }
-                        ?>
-                    </tbody>
-                    <tfoot>
-                        <tr class="total-row">
-                            <td class="toltal-price" colspan="4">TOTAL: $<span id='sum'><?=isset($_SESSION['totalCart']) ? number_format($_SESSION['totalCart'],2) : '' ?></span></td>
-                            <td></td>
-                        </tr>
-                    </tfoot>
-                </table>
-                <div class='order-btn'>
-                    <a href='customer-cart.php' class="btn purchase-btn gocart">Go to Cart</a>
-                </div>
+            <span class="separator"></span>
+            <!-- cart product-->
+            <table class="table table-condensed" id="cart-product">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Subtotal</th>
+                        <th>Remove</th>
+                    </tr>
+                </thead>
+                <tbody class="cart-items">
+                    <?php
+                    if (isset($_SESSION['customerCart'])) {
+                        foreach ($_SESSION['customerCart'] as $item) : ?>
+                            <tr class='cart-row'>
+                                <td class='item-img'>
+                                    <img style="height: 80px; width:100px" src='<?= admin_findImg($item['id']) ?>' alt=''>
+                                    <span class='item-name'><?= $item['name'] ?></span>
+                                </td>
+                                <td>
+                                    <input type="hidden" class='price' value="<?= $item['price'] ?>">
+                                    $<span class='item-price'><?= $item['price'] ?></span>
+                                </td>
+                                <td>
+                                    <input style='max-width:50px' name='itemQuantity' type='number' min='1' step='1' value='<?= $item['qtt'] ?>' class='quantity-input' data-id='<?= $item['id'] ?>'>
+                                </td>
+                                <td>
+                                    <input type='hidden' value='<?= $item['subtotal'] ?>' class='subtotal'>
+                                    $<span class='visible-subtotal'><?= $item['subtotal'] ?></span>
+                                </td>
+                                <td>
+                                    <button data-id='<?= $item['id'] ?>' class='remove btn btn-danger'>Remove</button>
+                                </td>
+                            </tr>
+                    <?php endforeach;
+                    }
+                    ?>
+                </tbody>
+                <tfoot>
+                    <tr class="total-row">
+                        <td class="toltal-price" colspan="4">TOTAL: $<span id='sum'><?= isset($_SESSION['totalCart']) ? number_format($_SESSION['totalCart'], 2) : '' ?></span></td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+            <div class='order-btn'>
+                <a href='customer-cart.php' class="btn purchase-btn gocart">Go to Cart</a>
+            </div>
             <!-- </form> -->
 
         </div>
@@ -189,7 +190,7 @@ if (isset($_POST['search-text'])) {
                     <img class='imgURL' src="<?= $value['imgURL'] ?>" alt="<?= $value['productName'] ?>" class="popup-img">
                     <p><?= $value['productDetail'] ?></p>
                     <p class='unitprice' style="visibility: hidden"><?= $value['unitPrice'] ?></p>
-                    <button type="button" class="close-btn mybtn" onclick="toggle(<?= $i?>)">Close</button>
+                    <button type="button" class="close-btn mybtn" onclick="toggle(<?= $i ?>)">Close</button>
                     <button type="button" data-id='<?= $value['productID'] ?>' data-name='<?= $value['productName'] ?>' class="AddToCart mybtn 2cart" onclick="toggle(<?= $i ?>);"><i class="fas fa-cart-plus"></i> Add To Cart</button>
                     <!-- <a href="customer-cart.php" class="AddToCart mybtn" target="_blank"><i class="fas fa-cart-plus"></i> Add To Cart</a> -->
                 </div>
@@ -221,7 +222,6 @@ if (isset($_POST['search-text'])) {
                 prevEl: '.swiper-button-prev',
             },
         });
-
     </script>
     <script src="js/addtocart.js"></script>
 </body>

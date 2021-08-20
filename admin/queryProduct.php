@@ -77,12 +77,12 @@ if ($_REQUEST['product']) {
                         <label for='detail'>Product detail</label>
                     </div>
                     <div class='image' style='position: relative; float:right; width:20%; padding:3px; text-align:center; border:1px solid #dbdbdb; background: white; border-radius: 6px;'>
-                        <img src='../{$row['imgURL']}' alt='image' style='width:114px; height:114px'>
+                        <img id='preview-change' src='../{$row['imgURL']}' alt='image' style='width:114px; height:114px'>
                     </div>
                 </div>
                 <div class='input-group mb-1'>
                     <span class='input-group-text'>New picture:</span>
-                    <input type='file' class='form-control' id='customFile' name='avatar' accept='.png, .jpg, .jpeg, .gif'/>
+                    <input type='file' class='form-control' id='customFile' name='avatar' accept='.png, .jpg, .jpeg, .gif'/ onchange='loadFile2(event)';>
                 </div>
                 <div class='mb-1'>
                     <small id='imgHelp' class='form-text text-muted'>Accept only JPG, PNG and GIF image files.</small>

@@ -19,7 +19,7 @@
                 </div>
                 <div class="number">
                     <i class="fa fa-list" aria-hidden="true"></i>
-                    <?= number_format(admin_countOrder(date('Y-m-d'))) ?>
+                    <?= number_format(admin_countOrder()) ?>
                 </div>
             </div>
         </div>

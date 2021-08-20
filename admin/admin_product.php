@@ -36,16 +36,19 @@
                 <!-- <span class="input-group-text">Initial Stock:</span>
                 <input id="quantity" type="text" class="form-control" name="quantity" placeholder="" aria-label="quantity"> -->
             </div>
-            <div class="form-floating mb-3">
+            <div class="form-floating mb-3" style='position:relative; width:83%; float:left;'>
                 <!-- <span class="input-group-text">Description:</span> -->
                 <textarea id="detail" style="height: 100px" class="form-control" name="detail" aria-label="detail" required></textarea>
                 <label for="detail">Product detail</label>
             </div>
+            <div class="preview-img" style='position: relative; float:right; width:15%; height:100px; padding:3px; text-align:center; border:1px solid #dbdbdb; background: white; border-radius: 6px;'>
+                <img style="height:90px" id='preview'>
+            </div>
             <!-- image upload -->
-            <h6></h6>
+            <br>
             <div class="mb-3">
-                <label for="customFile">Picture:</label>
-                <input style="max-width:50%" type="file" class="form-control" id="customFile" name="avatar" accept=".png, .jpg, .jpeg, .gif" />
+                <!-- <label for="customFile"><p>Picture:</p></label> -->
+                <input style="max-width:50%" type="file" class="form-control" id="customFile" name="avatar" accept=".png, .jpg, .jpeg, .gif" onchange="loadFile(event);" />
                 <small id="imgHelp" class="form-text text-muted">Accept only JPG, PNG and GIF image
                     files.</small>
             </div>
@@ -189,5 +192,24 @@ if (isset($_SESSION['success'])) {
 }
 ?>
 </body>
+<script>
+    //Preview upload image file when add product:
+    function loadFile(e) {
+        var img = document.querySelector('#preview');
+        img.src = URL.createObjectURL(e.target.files[0]);
+        img.onload = () => {
+            URL.revokeObjectURL(img.src);
+        }
+    }
+
+    //Preview upload image file when update product:
+    function loadFile2(e) {
+        var img = document.querySelector('#preview-change');
+        img.src = URL.createObjectURL(e.target.files[0]);
+        img.onload = () => {
+            URL.revokeObjectURL(img.src);
+        }
+    }
+</script>
 
 </html>
