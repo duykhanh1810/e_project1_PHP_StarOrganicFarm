@@ -628,7 +628,7 @@ function admin_DisplayCustomer($search)
 function admin_contact()
 {
     $conn = connect();
-    $sql = "SELECT * FROM contact_us";
+    $sql = "SELECT * FROM contact_us ORDER BY datetime DESC";
     $result = $conn->query($sql);
     $html = '';
     if ($result->num_rows >= 0) {
@@ -643,13 +643,14 @@ function admin_contact()
                 </tr>
         ";
         foreach ($result as $value) {
+            $date = date('d/m/Y - H:s:i', strtotime($value['datetime']));
             $html .= "
             <tr>
                 <td>{$value['first_name']} {$value['last_name']}</td>
                 <td>{$value['email']}</td>
                 <td>{$value['phone']}</td>
                 <td>{$value['message']}</td>
-                <td>{$value['datetime']}</td>
+                <td>{$date}</td>
                 <td><a class='btn btn-primary' href='mailto:{$value['email']}'>Email</a></td>
             </tr>
             ";
