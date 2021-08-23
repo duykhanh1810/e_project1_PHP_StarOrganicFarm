@@ -2,9 +2,9 @@
 session_start();
 require 'adminFunction.php';
 
-if (isset($_SESSION['account'])) { 
+if (isset($_SESSION['account'])) {
     $user = $_SESSION['account'];
-    ?>
+?>
     <!DOCTYPE html>
     <html lang="en">
 
@@ -20,6 +20,7 @@ if (isset($_SESSION['account'])) {
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script src="../js/admin.js"></script>
         <link rel="stylesheet" href="..//css//adminCP.css">
+        <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
     </head>
 
     <body>
@@ -30,12 +31,12 @@ if (isset($_SESSION['account'])) {
                 </div>
                 <ul class="menu">
                     <a href="?page=account">
-                    <li class="account">
-                        <div class='user-account'>
-                            <span class="icon"><i class="fa fa-user-circle-o" aria-hidden="true"></i></span>
-                            <span class="text">User#<?=$user['userID']?>: <?= $user['userName'] ?></span>
-                        </div>
-                    </li>
+                        <li class="account">
+                            <div class='user-account'>
+                                <span class="icon"><i class="fa fa-user-circle-o" aria-hidden="true"></i></span>
+                                <span class="text">User#<?= $user['userID'] ?>: <?= $user['userName'] ?></span>
+                            </div>
+                        </li>
                     </a>
                     <a href="?page=home">
                         <li class='adminItem <?= $_GET['page'] == "home" ? "adminItemActive" : "" ?>'>

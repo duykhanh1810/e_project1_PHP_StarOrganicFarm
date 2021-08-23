@@ -35,7 +35,7 @@ if(isset($_GET['id'])){ //the request sent by js retrieved here
                 <input type='hidden' name='itemPrice' class='price' value='{$product->unitPrice}'>
             </td>
             <td>
-                <input style='max-width:50px' name='itemQuantity' type='number' min='1' step='1' value='1' class='quantity-input' data-id='{$productID}'>
+                <input style='max-width:50px' name='itemQuantity' type='number' min='1' step='1' value='1' class='quantity-input' data-id='{$productID}>
             </td>
             <td>
                 <input type='hidden' value='{$product->unitPrice}' class='subtotal'>
@@ -46,6 +46,5 @@ if(isset($_GET['id'])){ //the request sent by js retrieved here
             </td>
         </tr>
     ";
- 
 }
 ?>

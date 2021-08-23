@@ -98,6 +98,7 @@ function admin_displayProduct($search, $order)
     if ($list->num_rows > 0) {
         echo "<table style='table-layout:fixed' class='tbl table table-striped table-hover'>
                 <tr class='head'>
+                    <th style='width:2%; vertical-align: middle;'>No.</th>
                     <th style='width:15%'>Product Name</th>
                     <th>Category</th>
                     <th style='width:40%;'>Product detail</th>
@@ -106,8 +107,11 @@ function admin_displayProduct($search, $order)
                     <th style='width:15%'>Manage</th>
                 </tr>
             ";
-        while ($item = $list->fetch_assoc()) { ?>
+        $i=1;
+        while ($item = $list->fetch_assoc()) {?>
+            
             <tr>
+                <td><?=$i?></td>
                 <td>
                     <p><img src="..\\<?= $item['imgURL'] ?>" alt="image" style="width:50%; height:50%"></p>
                     <p><b><?= $item['productName'] ?></b></p>
@@ -123,7 +127,7 @@ function admin_displayProduct($search, $order)
                 <td class="edit"><button class="item-list btn btn-success edit-product" data-bs-toggle="modal" data-id="<?= $item['productID'] ?>" data-bs-target="#editPanel">Update</button></td>
             </tr>
 
-        <?php   }
+        <?php $i++;  }
         echo "</table>";
     } else {
         echo "<table class='table'><tr><td><b>Product not found.</b></td></tr></table>";

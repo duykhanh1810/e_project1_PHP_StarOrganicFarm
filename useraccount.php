@@ -259,6 +259,7 @@ $cus = $result->fetch_object();
                 e.preventDefault();
                 $('#errOldPass').text('Please confirm your current password.');
             }
+            
             if ($('#newpass').val() == '' || $('#repass').val() == '') {
                 e.preventDefault();
                 $('#errNewPass').text('Please enter your new password and re-type it.');

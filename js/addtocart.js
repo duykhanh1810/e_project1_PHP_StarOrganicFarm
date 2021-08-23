@@ -44,6 +44,10 @@ $(document).ready(function () {
         updateCart(); //Call function to calculate value of the cart each time user change the quantity
         var productID = $(this).attr('data-id'); //The data-id attribute of the button contain the #id of the product
         var qtt = $(this).val(); //the new quantity of the product
+        if(qtt <=0 ) {
+            qtt = 1;
+            $(this).val(1);
+        }
         var sum = parseFloat($('#sum').text()); //the new total value in cart
 
         //Send all the above data to server
@@ -83,6 +87,9 @@ $(document).ready(function () {
         $('#cart-product > tbody > tr').each(function () {
             quantity = $(this).find('.quantity-input').val();
             var price = parseFloat($(this).find('.price').val());
+            if(quantity<=0) {
+                quantity = 1;
+            }
             var subtotal = quantity * price;
             if (!isNaN(subtotal)) {
                 sum += subtotal;

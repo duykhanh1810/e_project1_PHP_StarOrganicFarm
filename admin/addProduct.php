@@ -34,7 +34,7 @@ if (isset($_POST['add'])) {
             $pname = filter_var($_POST['pname'], FILTER_SANITIZE_STRING);
             $category = $_POST['category'];
             $price = $_POST['price'];
-            $detail = htmlspecialchars($_POST['detail']);
+            $detail = $_POST['detail'];
             
             $file = $_FILES['avatar'];
             $pathUpload = "../imgs/";
