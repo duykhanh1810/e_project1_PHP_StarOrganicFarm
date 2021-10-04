@@ -31,6 +31,7 @@ if (!isset($_SESSION['login'])) {
     <!--customer stylesheet-->
     <link rel="stylesheet" href="css/general.css">
     <link rel="stylesheet" href="css/product.css">
+    <link rel="stylesheet" href="css/home.css">
     <link rel="stylesheet" href="css/cart.css">
     <!-- customer javascript-->
     <script src="js/showMenuOnScroll.js"></script>
@@ -164,19 +165,7 @@ if (!isset($_SESSION['login'])) {
                 </div>
             </div><!-- /cart container-->
         </div>
-        <!--end content div-->
-
-        <div id="foot">
-            <div id="copyrights">
-                Copyright & copy <?= date("Y") ?>. All rights reserved by Brothers In Farm
-            </div>
-            <div id="social-media">
-                <a href="#"><i class="fab fa-facebook"></i></a>
-                <a href="#"><i class="fab fa-twitter"></i></a>
-                <a href="#"><i class="fab fa-instagram"></i></a>
-            </div>
-        </div>
-        <!--end foot div-->
+        <?php include 'footer.php' ?>
     </div><!-- end page div-->
     <!-- <a href="#" class="UpToTop"><i class="fas fa-arrow-up"></i></a> -->
 

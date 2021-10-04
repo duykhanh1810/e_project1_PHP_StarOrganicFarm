@@ -56,7 +56,7 @@ if (isset($_POST['upinfo'])) {
             }
         }
     }
-
+    
     if (count($error) > 0) {
         $_SESSION['error'] = $error;
         header("location: useraccount.php");

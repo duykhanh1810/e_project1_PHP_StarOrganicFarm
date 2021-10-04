@@ -1,6 +1,6 @@
 <?php session_start();
 require 'admin/database.php';
-if(isset($_POST['login'])){
+if (isset($_POST['login'])) {
     $conn = connect();
     $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
     $pass = $_POST['pass'];
@@ -9,25 +9,26 @@ if(isset($_POST['login'])){
     $stm->bind_param("s", $email);
     $stm->execute();
     $result = $stm->get_result();
-    if($result->num_rows>0){
-        while($user=$result->fetch_assoc()){
-            if(password_verify($pass, $user['password'])===true){
+    if ($result->num_rows > 0) {
+        while ($user = $result->fetch_assoc()) {
+            if (password_verify($pass, $user['password']) === true) {
                 $_SESSION['login'] = true;
                 $_SESSION['cid'] = $user['customerID'];
                 $_SESSION['name'] = $user['customerName'];
                 $_SESSION['email'] = $user['customerEmail'];
                 $_SESSION['phone'] = $user['customerPhone'];
-
-            }
-            if(isset($_SESSION['customerCart'])){
-                header ("location: customer-cart.php");
+                if (isset($_SESSION['customerCart'])) {
+                    header("location: customer-cart.php");
+                } else {
+                    header ("location: index.php");
+                }
             } else {
-                header ("location: index.php");
+                $_SESSION['error'] = 'Invalid email or password.';
+                header("location: login.php");
             }
         }
     } else {
         $_SESSION['error'] = 'Invalid email or password.';
-        header ("location: login.php");
+        header("location: login.php");
     }
 }
-?>

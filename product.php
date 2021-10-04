@@ -172,16 +172,16 @@ if (isset($_POST['search-text'])) {
         <!-- popup information for each product onclick product image-->
         <div id="popup-container">
             <?php
-            $i = 0;
+            $i = 1;
             foreach ($product as $value) { ?>
-                <div id="popup-<?= $i + 1 ?>" class="popup">
+                <div id="popup-<?= $i ?>" class="popup">
                     <span class='pid' style="display:none"><?= $value['productID'] ?></span>
                     <h2 class='pname'><?= $value['productName'] ?></h2>
                     <img class='imgURL' src="<?= $value['imgURL'] ?>" alt="<?= $value['productName'] ?>" class="popup-img">
                     <p><?= $value['productDetail'] ?></p>
                     <p class='unitprice' style="visibility: hidden"><?= $value['unitPrice'] ?></p>
-                    <button type="button" class="close-btn mybtn" onclick="toggle(<?= $i + 1 ?>)">Close</button>
-                    <button type="button" data-id='<?= $value['productID'] ?>' data-name='<?= $value['productName'] ?>' class="AddToCart mybtn 2cart" onclick="toggle(<?= $i + 1 ?>);"><i class="fas fa-cart-plus"></i> Add To Cart</button>
+                    <button type="button" class="close-btn mybtn" onclick="toggle(<?= $i?>)">Close</button>
+                    <button type="button" data-id='<?= $value['productID'] ?>' data-name='<?= $value['productName'] ?>' class="AddToCart mybtn 2cart" onclick="toggle(<?= $i ?>);"><i class="fas fa-cart-plus"></i> Add To Cart</button>
                     <!-- <a href="customer-cart.php" class="AddToCart mybtn" target="_blank"><i class="fas fa-cart-plus"></i> Add To Cart</a> -->
                 </div>
             <?php
@@ -190,18 +190,7 @@ if (isset($_POST['search-text'])) {
         </div>
         <!-- end popup container-->
     </div>
-    <!--end content div-->
-    <div id="foot">
-        <div id="copyrights">
-            Copyright & copy <?= date("Y") ?>. All rights reserved by Brothers In Farm
-        </div>
-        <div id="social-media">
-            <a href="http://fb.com"><i class="fab fa-facebook-square"></i></a>
-            <a href="http://instagram.com"><i class="fab fa-instagram"></i></a>
-            <a href="http://twitter.com"><i class="fab fa-twitter-square"></i></a>
-        </div>
-    </div>
-    <!--End foot div-->
+    <?php include 'footer.php' ?>
     </div><!-- end page div-->
     <a href="#" class="UpToTop"><i class="fas fa-arrow-up"></i></a>
 
