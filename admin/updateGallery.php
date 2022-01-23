@@ -25,7 +25,7 @@ if(isset($_POST['add'])){
         } else {
             $pathUpload = "../imgs/gallery/";
             $path = "imgs/gallery/";
-            $fileName = $file['name'];
+            $fileName = uniqid().$file['name']; #generate unique file name
             $tmp_name = $file['tmp_name'];
             $fileErr = $file['error'];
             

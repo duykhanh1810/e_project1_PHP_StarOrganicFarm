@@ -3,6 +3,7 @@ require 'adminFunction.php';
 $conn = connect();
 if ($_REQUEST['product']) {
     $pid = $_REQUEST['product'];
+    $pid = $conn->real_escape_string($pid);
     $sql = "SELECT pd.productID, pd.imgURL, pd.productID, pd.productName, pd.categoryID, ct.categoryName, pd.productDetail, pd.unitPrice, pd.status
         FROM product as pd 
         INNER JOIN category as ct ON pd.categoryID = ct.categoryID 
@@ -25,10 +26,9 @@ if ($_REQUEST['product']) {
             $updateStat = 1;
             $updateText = "On Sale";
             break;
-
     }
 
-   //find all category and exclude the selected product's category
+    //find all category and exclude the selected product's category
     $list = $conn->query("SELECT categoryID, categoryName FROM category WHERE categoryName NOT LIKE '$ct'");
 
     //store all <option> tags with categories in a variable
@@ -72,16 +72,18 @@ if ($_REQUEST['product']) {
                 </div>
                 <div >
                     <div class='form-floating mb-3' style='position:relative; width:78%; float:left;'>
-                        <textarea id='detail' style='height: 120px;' class='form-control' name='detail' aria-label='detail' required>{$row['productDetail']}</textarea>
-                        <label for='detail'>Product detail</label>
+                        <textarea id='editdetail' style='height: 120px;' class='form-control' name='detail' aria-label='editdetail' required>{$row['productDetail']}</textarea>
+                        <script>
+                            CKEDITOR.replace('editdetail');
+                        </script>
                     </div>
                     <div class='image' style='position: relative; float:right; width:20%; padding:3px; text-align:center; border:1px solid #dbdbdb; background: white; border-radius: 6px;'>
-                        <img src='../{$row['imgURL']}' alt='image' style='width:114px; height:114px'>
+                        <img id='preview-change' src='../{$row['imgURL']}' alt='image' style='width:114px; height:114px'>
                     </div>
                 </div>
                 <div class='input-group mb-1'>
                     <span class='input-group-text'>New picture:</span>
-                    <input type='file' class='form-control' id='customFile' name='avatar' accept='.png, .jpg, .jpeg, .gif'/>
+                    <input type='file' class='form-control' id='customFile' name='avatar' accept='.png, .jpg, .jpeg, .gif'/ onchange='loadFile2(event)';>
                 </div>
                 <div class='mb-1'>
                     <small id='imgHelp' class='form-text text-muted'>Accept only JPG, PNG and GIF image files.</small>

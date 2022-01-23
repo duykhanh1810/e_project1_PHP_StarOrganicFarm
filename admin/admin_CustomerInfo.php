@@ -2,7 +2,7 @@
     <h2>Customer Information</h2>
     <div class="customer list row">
         <div class="col-md-3 title" style="padding-bottom: 10px;">
-            <h4 style="visibility:visible">Registered customers list</h4>
+            <h4 style="visibility:visible">Registered customers</h4>
         </div>
         <div class="col-md-4" style="padding-bottom: 10px;">
             <form action="" method="post" class="src-form" style="position: absolute; right: 45px; width:30%;">

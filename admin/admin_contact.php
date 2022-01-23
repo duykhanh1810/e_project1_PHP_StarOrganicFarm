@@ -5,14 +5,14 @@
             <h4 style="visibility:hidden">Feedback and contact</h4>
         </div>
         <div class="col-md-4" style="padding-bottom: 10px;">
-            <form action="" method="get" class="src-form" style="position: absolute; right: 45px; width:30%;">
+            <!-- <form action="" method="get" class="src-form" style="position: absolute; right: 45px; width:30%;">
                 <div class="search-bar input-group">
                     <input name="searchvalue" type="search" id="searchbar" class="form-control src" placeholder="Search" />
                     <button class="btn btn-outline-success" type="submit" name="search" id='src-submit'>
                         <i class="fa fa-search" aria-hidden="true"></i>
                     </button>
                 </div>
-            </form>
+            </form> -->
         </div>
 
         <div class="display">

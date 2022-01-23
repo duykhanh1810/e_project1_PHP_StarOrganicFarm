@@ -1,7 +1,7 @@
 <div class="content">
     <h2>Dashboard</h2>
-    <div class='row container justify-content-center'>
-        <div class="col ">
+    <div class='row' style="padding-left: 10px;padding-right: 10px;">
+        <div class="col-3">
             <div class="stat-user">
                 <div class="text">
                     Customer
@@ -12,18 +12,18 @@
                 </div>
             </div>
         </div>
-        <div class="col">
+        <div class="col-3">
             <div class="stat-lsale">
                 <div class="text">
                     This week orders
                 </div>
                 <div class="number">
                     <i class="fa fa-list" aria-hidden="true"></i>
-                    <?= number_format(admin_countOrder(date('Y-m-d'))) ?>
+                    <?= number_format(admin_countOrder()) ?>
                 </div>
             </div>
         </div>
-        <div class="col">
+        <div class="col-3">
             <div class="stat-csale">
                 <div class="text">
                     Today Sale
@@ -33,7 +33,7 @@
                 </div>
             </div>
         </div>
-        <div class="col">
+        <div class="col-3">
             <div class="stat-total">
                 <div class="text">
                     Total Sale
@@ -95,11 +95,10 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body" id="order-detail">
-                        <!-- query.php fetchs data here -->
+                        <!-- ajax jquery fetching data here -->
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <!-- <input type="submit" value="Save changes" name="save" class="btn btn-primary"> -->
                     </div>
                 </div>
             </div>

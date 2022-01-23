@@ -14,7 +14,7 @@ if (isset($_POST['save'])) {
     $pname = filter_var($_POST['pname'], FILTER_SANITIZE_STRING);
     $category = $_POST['category'];
     $price = $_POST['price'];
-    $detail = htmlspecialchars($_POST['detail']);
+    $detail = $_POST['detail'];
     $status = $_POST['status'];
     
     $imgURL = '';
@@ -29,11 +29,13 @@ if (isset($_POST['save'])) {
         $allowExt = array('jpg', 'jpeg', 'png', 'gif');
         if (!in_array($ext, $allowExt)) {
             $errorImg = 'Invalid file type. The image format must be JPG, PNG or GIF.';
+        } elseif($file['size'] > 5000000) {
+            $errorImg = 'File is too large. Please reduce file size less than 5MB.';
         } else {
             $errorImg = 0;
             $pathUpload = "../imgs/";
             $path = "imgs/";
-            $fileName = $file['name'];
+            $fileName = uniqid().$file['name']; //generate an unique name for the file uploaded
             $tmp_name = $file['tmp_name'];
             move_uploaded_file($tmp_name, $pathUpload . $fileName);
             $imgURL = $path . $fileName;

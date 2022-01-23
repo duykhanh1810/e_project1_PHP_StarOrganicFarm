@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 14, 2021 at 03:01 PM
+-- Generation Time: Aug 21, 2021 at 05:14 AM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 8.0.3
 
@@ -20,8 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `starorganic`
 --
-CREATE DATABASE IF NOT EXISTS `starorganic` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE `starorganic`;
 
 DELIMITER $$
 --
@@ -54,7 +52,7 @@ CREATE TABLE `category` (
   `categoryID` int(11) NOT NULL,
   `categoryName` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `unit` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `categoryDetail` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `categoryDetail` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `status` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -63,7 +61,7 @@ CREATE TABLE `category` (
 --
 
 INSERT INTO `category` (`categoryID`, `categoryName`, `unit`, `categoryDetail`, `status`) VALUES
-(1, 'Fruits', 'kg', 'Fresh fruits are a great option for breakfast, snack or dessert. Most fruits are sweet and ready for you to eat without cooking or preparing a recipe. Take an apple, a peach, or a banana and just enjoy. Remember to always have fresh fruit available at home. If you have good choices available, you will make good choices.', 1),
+(1, 'Fruits', 'kg', 'Fresh fruits are a great option for breakfast, snack or dessert. Most fruits are sweet and ready for you to eat without cooking or preparing a recipe. Take an apple, a peach, or a banana and just enjoy. Remember to always have fresh fruit available at home. If you have good choices available, you will make good choices.\r\n', 1),
 (2, 'Rice', 'kg', 'Rice is a rich source of carbohydrates, the body’s main fuel source. Carbohydrates can keep you energized and satisfied, and are important for fueling exercise. Brown rice, especially, is an excellent source of many nutrients, including fiber, manganese, selenium, magnesium, and B vitamins. Dietary Guidelines suggest that at least half of your grains be from whole grains, and brown rice is considered a whole grain. But even white rice has nutrients. It is considered a good source of folate. In short, YES, rice is a healthy staple that offers many nutrients.', 1),
 (3, 'Condiment and Spice', '100g', 'A condiment is a spice, sauce, or preparation that is added to food, after cooking, to impart a specific flavor, to enhance the flavor, or to complement the dish. A table condiment or table sauce is more specifically a condiment that is served separately from the food and is added to taste by the diner.', 1),
 (4, 'Oils', '100ml', 'Oils are the basis for many favorite recipes and play a major part in various cooking techniques, from sautéing and frying to roasting and baking.\r\nWhile many recipes specify which oil to use, some don’t. And believe it or not, you may actually get a superior meal by experimenting with something other than what’s called for.', 1);
@@ -82,7 +80,7 @@ CREATE TABLE `contact_us` (
   `email` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
   `phone` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `message` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `datetime` datetime DEFAULT current_timestamp(),
+  `datetime` datetime NOT NULL DEFAULT current_timestamp(),
   `status` int(11) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -93,7 +91,15 @@ CREATE TABLE `contact_us` (
 INSERT INTO `contact_us` (`id`, `first_name`, `last_name`, `email`, `phone`, `message`, `datetime`, `status`) VALUES
 (1, 'Duy', 'Khanh', 'khanh@gmail.com', '0123456789', 'test', '2021-08-11 10:31:37', 1),
 (2, 'Phạm', 'Đạt', 'phamquangdat2208@gmail.com', '0904855879', 'I want to contact with you', '2021-08-11 11:30:53', 1),
-(3, 'Đào', 'Hà', 'thanhha@fac.vn', '+84904833800', 'I want to by some fruit', '2021-08-12 15:38:24', 1);
+(3, 'Đào', 'Hà', 'thanhha@fac.vn', '+84904833800', 'I want to by some fruit', '2021-08-12 15:38:24', 1),
+(4, 'Nguyen Huu', 'Tung', 'nguyenhuutung02042001@gmail.com', '0387582508', 'tesstttt', '2021-08-18 16:05:34', 1),
+(5, 'Ha', 'Thanh', 'duykhanh@gmail.com', '909897786', '&lt;script&gt;alert(&quot;test&quot;)&lt;/script&gt;', '2021-08-18 16:06:13', 1),
+(6, 'Minh Thái', 'Nguyễn', 'nguyenminhthai22092000@gmail.com', '0981640965', 'Hello ae \r\n', '2021-08-18 16:07:26', 1),
+(9, 'Thanh Hà', 'Đào', 'june25th87@gmail.com', '+84988144706', '&lt;i&gt;Xin chào&lt;/i&gt;', '2021-08-18 16:26:32', 1),
+(10, 'Thanh', 'Đào', 'june25th87@gmail.com', '+84988144706', 'Test message', '2021-08-18 16:28:40', 1),
+(11, 'Đào', 'Hà', 'thanhha@fac.vn', '+84904833800', 'Hello', '2021-08-18 16:39:59', 1),
+(12, 'Pham', 'Dat', 'phamquangdat2208@gmail.com', '0904855879', 'Hello', '2021-08-18 22:39:51', 1),
+(13, 'Duy', 'Khanh', 'duykhanh@gmail.com', '0123456789', 'test', '2021-08-19 20:56:46', 1);
 
 -- --------------------------------------------------------
 
@@ -107,7 +113,7 @@ CREATE TABLE `customers` (
   `customerName` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `customerEmail` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `customerPhone` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `password` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `password` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `joinDate` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -119,9 +125,11 @@ INSERT INTO `customers` (`customerID`, `customerName`, `customerEmail`, `custome
 (1, 'default', 'default', 'default', 'default', '2021-07-22 20:57:15'),
 (2, 'ThanhHa', 'thanhha@gmail.com', '0988144706', '$2y$10$gRdJPpAMgtRNRRWlp8Q.MeSR.LSi2zJBHbcPAiPcLlCVnyfoh3aSu', '2021-08-06 15:11:20'),
 (3, 'DuyKhanh', 'duykhanh@gmail.com', '0987654322', '$2y$10$qmR7bBXmSaJHESzYQtVl.e5ZiehEy.7wZCTM.d5QYG/Jalv7qHPDq', '2021-08-06 15:12:45'),
-(4, 'MinhThai', 'thai@gmail.com', '12345678', '$2y$10$6KNDFZXgICsAynGzfyCUP.dE31mdhvAiP2CvSwk2WBcHdkG83XK0W', '2021-08-06 15:28:49'),
+(4, 'MinhThai', 'thai@gmail.com', '1234567809', '$2y$10$6KNDFZXgICsAynGzfyCUP.dE31mdhvAiP2CvSwk2WBcHdkG83XK0W', '2021-08-06 15:28:49'),
 (5, 'duchiep', 'hiep@gmail.com', '0987654321', '$2y$10$45DREmGENXLQa8FdkVnlPeL6F2H1N9RB27L1a5mlwYljcFHPJ5wXi', '2021-08-11 10:33:40'),
-(6, 'Phạm Quang Đạt', 'phamquangdat2208@gmail.com', '0904855879', '$2y$10$Oz0jufoXSMwltQwM989J8eWBQZKK2ohLqB.JuI6O40gqnKFacJjLu', '2021-08-11 11:33:44');
+(6, 'Phạm Quang Đạt', 'phamquangdat2208@gmail.com', '0904855879', '$2y$10$Oz0jufoXSMwltQwM989J8eWBQZKK2ohLqB.JuI6O40gqnKFacJjLu', '2021-08-11 11:33:44'),
+(7, 'Pham Quang Dat', 'dat@gmail.com', '0913579951', '$2y$10$qvRHsw2VikJ.ASGRpugOjOUdbsITTNCuOR1jSIb9ZMnPpqHlOnQNS', '2021-08-17 20:00:24'),
+(8, 'Pham Quang Dat', 'dat2@gmail.com', '0904855869', '$2y$10$j4KFLI83UBtAMmFR1riWVORQRr8g1Zu9a7YUh9a6tK7G9kxwlWVjy', '2021-08-21 00:56:38');
 
 -- --------------------------------------------------------
 
@@ -151,7 +159,6 @@ INSERT INTO `gallery` (`id`, `imgURL`, `category`) VALUES
 (8, 'imgs/gallery/farmer3.jpg', 'Farmer'),
 (9, 'imgs/gallery/product2.jpg', 'Product'),
 (10, 'imgs/gallery/animal4.jpg', 'Animal'),
-(11, 'imgs/gallery/animal5.jpg', 'Animal'),
 (12, 'imgs/gallery/farmer4.jpg', 'Farmer'),
 (13, 'imgs/gallery/farm2.jpg', 'Farm'),
 (15, 'imgs/gallery/farm4.jpg', 'Farm'),
@@ -160,7 +167,8 @@ INSERT INTO `gallery` (`id`, `imgURL`, `category`) VALUES
 (18, 'imgs/gallery/farmer5.jpg', 'Farmer'),
 (19, 'imgs/gallery/product3.jpg', 'Product'),
 (20, 'imgs/gallery/product5.jpg', 'Product'),
-(21, 'imgs/gallery/farm3.jpg', 'Farm');
+(21, 'imgs/gallery/farm3.jpg', 'Farm'),
+(22, 'imgs/gallery/611fcf2435c08animal5.jpg', 'Animal');
 
 -- --------------------------------------------------------
 
@@ -228,7 +236,32 @@ INSERT INTO `orderdetail` (`orderID`, `productID`, `orderDetailPrice`, `quantity
 (9, 9, 0.25, 6),
 (9, 10, 0.25, 5),
 (9, 12, 3.99, 1),
-(9, 13, 4.99, 1);
+(9, 13, 4.99, 1),
+(10, 1, 0.5, 1),
+(10, 2, 0.75, 1),
+(10, 3, 1.75, 4),
+(10, 4, 1, 1),
+(10, 6, 3.5, 3),
+(10, 7, 3.5, 1),
+(11, 2, 0.75, 1),
+(11, 3, 1.75, 1),
+(11, 4, 1, 1),
+(11, 6, 3.5, 1),
+(12, 2, 0.75, 2),
+(12, 6, 3.5, 1),
+(13, 2, 0.75, 1),
+(13, 3, 1.75, 1),
+(14, 1, 0.5, 3),
+(14, 2, 0.75, 1),
+(14, 3, 1.75, 1),
+(14, 6, 3.5, 1),
+(14, 17, 2.5, 1),
+(14, 18, 3.5, 4),
+(14, 21, 6.5, 1),
+(14, 34, 5.5, 1),
+(15, 2, 0.75, 3),
+(15, 3, 1.75, 3),
+(15, 4, 1, 3);
 
 --
 -- Triggers `orderdetail`
@@ -260,12 +293,12 @@ DELIMITER ;
 DROP TABLE IF EXISTS `orders`;
 CREATE TABLE `orders` (
   `orderID` int(11) NOT NULL,
-  `customerID` int(11) DEFAULT NULL,
+  `customerID` int(11) NOT NULL,
   `orderTime` datetime DEFAULT current_timestamp(),
   `dAdd` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `phone` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `orderValue` float DEFAULT 0,
-  `orderStatus` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT 'pending',
+  `orderValue` float NOT NULL DEFAULT 0,
+  `orderStatus` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
   `staffID` int(11) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -280,7 +313,13 @@ INSERT INTO `orders` (`orderID`, `customerID`, `orderTime`, `dAdd`, `phone`, `or
 (4, 3, '2021-08-09 17:11:22', '199 Cầu Giấy', '098734899', 37.18, 'success', 1),
 (5, 3, '2021-08-11 19:53:49', 'Riverside Garden - 349 Vũ Tông Phan, Khương Đình, Thanh Xuân, Hà Nội', '+84904833800', 4.5, 'success', 2),
 (8, 3, '2021-08-13 09:04:19', '33 ngõ 477 Kim Ngưu - Hai Bà Trưng - Hà Nội', '0987654321', 25.25, 'success', 7),
-(9, 3, '2021-08-13 09:20:33', '33 ngõ 477 Kim Ngưu - Hai Bà Trưng - Hà Nội', '0987654321', 40.98, 'success', 7);
+(9, 3, '2021-08-13 09:20:33', '33 ngõ 477 Kim Ngưu - Hai Bà Trưng - Hà Nội', '0987654321', 40.98, 'success', 7),
+(10, 3, '2021-08-17 18:02:03', '33 ngõ 477 Kim Ngưu - Hai Bà Trưng - Hà Nội', '0987654321', 23.25, 'success', 7),
+(11, 4, '2021-08-17 18:05:03', 'Nhà của Thái', '0987888655', 7, 'success', 7),
+(12, 7, '2021-08-17 20:00:43', 'Au Co', '0913579951', 5, 'success', 7),
+(13, 4, '2021-08-18 21:59:49', '59 hàng gai', '0981640965', 2.5, 'pending', 0),
+(14, 8, '2021-08-21 00:57:32', '142 Âu Cơ Tây Hồ Hà Nội', '0904855869', 36, 'success', 4),
+(15, 4, '2021-08-21 09:14:39', 'Thai&#39;s home', '0987439871', 10.5, 'pending', 0);
 
 -- --------------------------------------------------------
 
@@ -291,9 +330,9 @@ INSERT INTO `orders` (`orderID`, `customerID`, `orderTime`, `dAdd`, `phone`, `or
 DROP TABLE IF EXISTS `product`;
 CREATE TABLE `product` (
   `productID` int(11) NOT NULL,
-  `productName` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `unitPrice` float DEFAULT NULL,
-  `productDetail` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `productName` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `unitPrice` float NOT NULL,
+  `productDetail` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `categoryID` int(11) NOT NULL,
   `status` int(11) NOT NULL DEFAULT 1,
   `imgURL` text COLLATE utf8mb4_unicode_ci NOT NULL
@@ -335,8 +374,10 @@ INSERT INTO `product` (`productID`, `productName`, `unitPrice`, `productDetail`,
 (29, 'Carrot Powder', 1.99, 'Carrot powder is a product from carrots after a process of processing by modern methods. The water is completely removed so that the powder is in a dry, smooth form, but its inherent nutritional content is not lost or reduced, but is still preserved thanks to high technology.', 3, 1, 'imgs/bot-ca-rot.png'),
 (30, 'Basil Powder', 2.99, 'Basil is an aromatic powder used as a seasoning to marinate meats, stews, roasts, grills, curries, and enhances the flavor of dishes. They are widely used in fatty meat dishes such as braised pork, roast duck, braised beef. In addition, basil is also very popular in stir-fried vegetables and seafood dishes. Not only bringing delicious flavor specific to each dish, basil is also a spice containing many ingredients with healing effects.', 3, 1, 'imgs/bot-hung-liu.jpg'),
 (31, 'Lemon Powder', 2.99, 'Lemon powder is a soluble powder, the product is extracted from 100% fresh lemon.\r\nEnsure the convenience, economy, hygiene to keep the taste of fresh lemon to the user.', 3, 1, 'imgs/bot-chanh.jpg'),
-(32, 'Pure Salt', 0.99, 'Table salt or simply called salt in folklore (although not all salt is in the correct scientific terms) is a mineral used by humans as a spice in food. \r\nTable salt is essential to life, but excessive use can increase the risk of health problems, such as high blood pressure. In cooking, table salt is used as a preservative as well as a seasoning.', 3, 1, 'imgs/muoi.jpg'),
-(33, 'Pepper', 1.99, 'Pepper powder is a seasoning ingredient in dishes, contributing to making dishes more attractive and delicious.\r\nQuality pepper powder is a type of pepper powder that has met the standards set out according to Vietnam\'s pepper standards.', 3, 1, 'imgs/tieu.jpg');
+(32, 'Pure Salt', 0.99, 'Table salt or simply called salt in folklore (although not all salt is in the correct scientific terms) is a mineral used by humans as a spice in food. \r\nTable salt is essential to life, but excessive use can increase the risk of health problems, such as high blood pressure. In cooking, table salt is used as a preservative as well as a seasoning.', 3, 1, 'imgs/611f219b70ed0muoi.jpg'),
+(33, 'Pepper', 1.99, 'Pepper powder is a seasoning ingredient in dishes, contributing to making dishes more attractive and delicious.\r\nQuality pepper powder is a type of pepper powder that has met the standards set out according to Vietnam\'s pepper standards.', 3, 1, 'imgs/611f20fe535b9tieu.jpg'),
+(34, 'Avocado Oil', 5.5, 'Avocado oil is an edible oil extracted from the pulp of the avocado, the fruit of Persea americana.\r\nIt is used as a cooking oil both raw and for cooking, where it is noted to have a high smoke point. It is also used for lubrication and in cosmetics.', 4, 1, 'imgs/dau-bo.jpg'),
+(35, 'Peanut Oil', 5, 'Peanut oil, also known as peanut oil or arachis oil, is a vegetable oil derived from peanuts.\r\nThe oil usually has a mild or neutral flavor but if made with roasted peanuts, has a stronger peanut flavor and aroma.', 4, 1, 'imgs/611f89dde6fd2dau-lac.jpg');
 
 -- --------------------------------------------------------
 
@@ -347,8 +388,8 @@ INSERT INTO `product` (`productID`, `productName`, `unitPrice`, `productDetail`,
 DROP TABLE IF EXISTS `staff`;
 CREATE TABLE `staff` (
   `staffID` int(11) NOT NULL,
-  `userName` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `email` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `userName` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `password` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `roleID` int(11) NOT NULL DEFAULT 2,
   `status` int(11) NOT NULL DEFAULT 1
@@ -359,10 +400,10 @@ CREATE TABLE `staff` (
 --
 
 INSERT INTO `staff` (`staffID`, `userName`, `email`, `password`, `roleID`, `status`) VALUES
-(1, 'rootadmin', 'ha.dt.1027@aptechlearning.edu.vn', '$2y$10$cJOgaJhGG3YwR4BGvcNMU.j3oJC.cYgfghJPSPgb8WJO.DVu4McOm', 1, 1),
-(2, 'MinhThai', 'thai@gmail.com', '$2y$10$jRntZ8v3QR6nGhSu/GoAsO6OZd/leAs.Aoi4H6vFYrTJonalMwaQm', 2, 1),
+(1, 'rootadmin', 'ha.dt.1027@aptechlearning.edu.vn', '$2y$10$Ny3sOklqVXCpTGk/LL8.IujSzkcA2RI4e4geA5baBlkL/rOaHWv/O', 1, 1),
+(2, 'MinhThai', 'minhthai@gmail.com', '$2y$10$jRntZ8v3QR6nGhSu/GoAsO6OZd/leAs.Aoi4H6vFYrTJonalMwaQm', 2, 1),
 (3, 'DuyKhanh', 'khanh@gmail.com', '$2y$10$n4vJSxQEudheEdp8HGoGi.HImLFBzBUr2k5kwEy9YLv9YQLiECQOq', 2, 1),
-(4, 'ThanhHa', 'thanhha@gmail.com', '$2y$10$hKDk19pkUe.l2QCC1oCKDepBxEpwi2HhUBt4nAckmHDbBmTKaXc9W', 1, 1),
+(4, 'ThanhHa', 'ha.dt@gmail.com', '$2y$10$yBNQYb5MREpLEYsaIW59mOW3fdjL65zn6NIXMFpaYNDD1d9N5wTCG', 2, 1),
 (6, 'QuangDat', 'quangdat@gmail.com', '$2y$10$H2pKySGl18oDmplTXg/62uk03mB27hvykyASttMFfAYRYEAR0QmSS', 2, 0),
 (7, 'DucHiep', 'duchiep@gmail.com', '$2y$10$jUM9MawteI31V.FdyhKbDevcIkfyterl1JjdbKVwTcKTKJNvybYhG', 2, 1),
 (8, 'HuuTung', 'tung@gmail.com', '$2y$10$n2Zwa160pNR7TYZdNYL.3.vH6Cmym88EatvLEzKTTCl633ORawfCm', 2, 1);
@@ -376,8 +417,8 @@ INSERT INTO `staff` (`staffID`, `userName`, `email`, `password`, `roleID`, `stat
 DROP TABLE IF EXISTS `staffrole`;
 CREATE TABLE `staffrole` (
   `roleID` int(11) NOT NULL,
-  `roleName` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `roleDetail` text COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  `roleName` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `roleDetail` text COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -397,7 +438,8 @@ INSERT INTO `staffrole` (`roleID`, `roleName`, `roleDetail`) VALUES
 --
 ALTER TABLE `category`
   ADD PRIMARY KEY (`categoryID`),
-  ADD UNIQUE KEY `categoryName` (`categoryName`);
+  ADD UNIQUE KEY `categoryName` (`categoryName`),
+  ADD UNIQUE KEY `categoryName_2` (`categoryName`);
 
 --
 -- Indexes for table `contact_us`
@@ -409,7 +451,8 @@ ALTER TABLE `contact_us`
 -- Indexes for table `customers`
 --
 ALTER TABLE `customers`
-  ADD PRIMARY KEY (`customerID`);
+  ADD PRIMARY KEY (`customerID`),
+  ADD UNIQUE KEY `customerName` (`customerName`,`customerEmail`,`customerPhone`);
 
 --
 -- Indexes for table `gallery`
@@ -447,6 +490,7 @@ ALTER TABLE `product`
   ADD PRIMARY KEY (`productID`),
   ADD UNIQUE KEY `productName` (`productName`),
   ADD UNIQUE KEY `productName_2` (`productName`),
+  ADD UNIQUE KEY `productName_3` (`productName`),
   ADD KEY `FK_Pro_Cat` (`categoryID`);
 
 --
@@ -456,6 +500,7 @@ ALTER TABLE `staff`
   ADD PRIMARY KEY (`staffID`),
   ADD UNIQUE KEY `userName` (`userName`),
   ADD UNIQUE KEY `email` (`email`),
+  ADD UNIQUE KEY `userName_2` (`userName`,`email`),
   ADD KEY `FK_Staff_Roll` (`roleID`);
 
 --
@@ -473,25 +518,25 @@ ALTER TABLE `staffrole`
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `categoryID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `categoryID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `contact_us`
 --
 ALTER TABLE `contact_us`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `customerID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `customerID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `gallery`
 --
 ALTER TABLE `gallery`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `gallerycat`
@@ -503,13 +548,13 @@ ALTER TABLE `gallerycat`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `orderID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `orderID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `productID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `productID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `staff`

@@ -1,64 +1,5 @@
 <div class="content">
     <h2>Product Management</h2>
-    <div class="collapse product add" id="addproduct">
-        <h4>Add new product</h4>
-        <form id="addproduct" action="addProduct.php" method="post" enctype="multipart/form-data">
-            <div class="input-group mb-1">
-                <span class="input-group-text" style="max-width:20%">Product name:</span>
-                <input type="text" id="pname" class="form-control" name="pname" placeholder="" aria-label="pname" required value="<?= isset($_GET['pname']) ? $_GET['pname'] : ''  ?>">
-
-                <!-- <input type="button" value="New Category" class="form-control btn btn-secondary"> -->
-            </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text" style="max-width:15%">Unit price:</span>
-                <span class="input-group-text" style="max-width:5%"><i class="fa fa-usd" aria-hidden="true"></i></span>
-                <input type="text" id="price" class="form-control" name="price" placeholder="" aria-label="price" required value="<?= isset($_GET['price']) ? $_GET['price'] : ''  ?>">
-                <span class="input-group-text">Category:</span>
-                <select class="form-select" name="category" id="ctg">
-                    <option value="0">select...</option>
-                    <?php
-                    $conn = connect();
-                    $list = $conn->query("SELECT categoryID, categoryName FROM category");
-                    if ($list->num_rows > 0) {
-                        while ($item = $list->fetch_assoc()) {
-                            echo "<option value=\"{$item['categoryID']}\">{$item['categoryName']}</option>";
-                        }
-                    }
-                    $conn->close();
-                    ?>
-                </select>
-                <?php if ($user['userRole'] == 1) { ?>
-                    <button type="button" class="form-control btn btn-outline-secondary" style="max-width: 12%" data-bs-toggle="modal" data-bs-target="#categoryPanel">
-                        <i class="fa fa-folder-open" aria-hidden="true"></i>
-                        <b>New</b>
-                    </button>
-                <?php } ?>
-                <!-- <span class="input-group-text">Initial Stock:</span>
-                <input id="quantity" type="text" class="form-control" name="quantity" placeholder="" aria-label="quantity"> -->
-            </div>
-            <div class="form-floating mb-3">
-                <!-- <span class="input-group-text">Description:</span> -->
-                <textarea id="detail" style="height: 100px" class="form-control" name="detail" aria-label="detail" required></textarea>
-                <label for="detail">Product detail</label>
-            </div>
-            <!-- image upload -->
-            <h6></h6>
-            <div class="mb-3">
-                <label for="customFile">Picture:</label>
-                <input style="max-width:50%" type="file" class="form-control" id="customFile" name="avatar" accept=".png, .jpg, .jpeg, .gif" />
-                <small id="imgHelp" class="form-text text-muted">Accept only JPG, PNG and GIF image
-                    files.</small>
-            </div>
-
-            <!-- submit -->
-            <div class="submit input-group mb3">
-                <input class="btn-add btn btn-primary" type="submit" value="Add" name="add" id="add">
-                <button class="btn-add btn btn-danger" type="reset" id="reset">Reset</button>
-            </div>
-        </form>
-    </div>
-    <br>
-
     <div class="product list">
         <div class="row" style="padding: 5px;">
             <div class="col">
@@ -72,7 +13,8 @@
                 </form>
             </div>
             <div class="col">
-                <a class="btn btn-warning" data-bs-toggle="collapse" href="#addproduct" role="button" aria-expanded="false" aria-controls="addproduct"><i class="fa fa-plus" aria-hidden="true"></i> Add product</a>
+                <!-- <a class="btn btn-warning" data-bs-toggle="collapse" href="#addproduct" role="button" aria-expanded="false" aria-controls="addproduct"><i class="fa fa-plus" aria-hidden="true"></i> Add product</a> -->
+                <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#productPanel"><i class="fa fa-plus" aria-hidden="true"></i> Add product</button>
             </div>
             <div class="col">
                 <form action="" method="post" id='search'>
@@ -109,6 +51,79 @@
             }
             ?>
         </div>
+        <!-- Add product -->
+        <form id="addproduct" action="addProduct.php" method="post" enctype="multipart/form-data">
+            <div class="modal fade" id="productPanel" tabindex="-1" aria-labelledby="productPanelLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 class="modal-title" id="productPanelLabel">
+                                <i class="fa fa-pencil-square" aria-hidden="true"></i>
+                                Create new product
+                            </h3>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body" id="product-add">
+                            <div class="input-group mb-1">
+                                <span class="input-group-text" style="max-width:20%">Product name:</span>
+                                <input type="text" id="pname" class="form-control" name="pname" placeholder="" aria-label="pname" required value="<?= isset($_GET['pname']) ? $_GET['pname'] : ''  ?>">
+                                <!-- <input type="button" value="New Category" class="form-control btn btn-secondary"> -->
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" style="max-width:15%">Unit price:</span>
+                                <span class="input-group-text" style="max-width:5%"><i class="fa fa-usd" aria-hidden="true"></i></span>
+                                <input type="text" id="price" class="form-control" name="price" placeholder="" aria-label="price" required value="<?= isset($_GET['price']) ? $_GET['price'] : ''  ?>">
+                                <span class="input-group-text">Category:</span>
+                                <select class="form-select" name="category" id="ctg">
+                                    <option value="0">select...</option>
+                                    <?php
+                                    $conn = connect();
+                                    $list = $conn->query("SELECT categoryID, categoryName FROM category");
+                                    if ($list->num_rows > 0) {
+                                        while ($item = $list->fetch_assoc()) {
+                                            echo "<option value=\"{$item['categoryID']}\">{$item['categoryName']}</option>";
+                                        }
+                                    }
+                                    $conn->close();
+                                    ?>
+                                </select>
+                                <?php if ($user['userRole'] == 1) { ?>
+                                    <button type="button" class="form-control btn btn-outline-secondary" style="max-width: 12%" data-bs-toggle="modal" data-bs-target="#categoryPanel">
+                                        <i class="fa fa-folder-open" aria-hidden="true"></i>
+                                        <b>New</b>
+                                    </button>
+                                <?php } ?>
+
+                            </div>
+                            <div class="form-floating mb-3">
+                                <!-- <span class="input-group-text">Description:</span> -->
+                                <textarea id="detail" style="height: 120px" class="form-control" name="detail" aria-label="detail" required></textarea>
+                                <script>
+                                    CKEDITOR.replace('detail');
+                                </script>
+                                <!-- <label for="detail">Product detail</label> -->
+                            </div>
+                            <!-- image upload -->
+                            <div class="mb-3">
+                                <label for="customFile">
+                                    <p>Picture:</p>
+                                </label>
+                                <input style="max-width:50%" type="file" class="form-control" id="customFile" name="avatar" accept=".png, .jpg, .jpeg, .gif" />
+                                <small id="imgHelp" class="form-text text-muted">Accept only JPG, PNG and GIF image
+                                    files.</small>
+                            </div>
+
+                            <!-- submit -->
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <input type="submit" value="Add" name="add" class="btn btn-primary">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
         <!-- Update product -->
         <form id='mng-product' action='updateproduct.php' method='post' enctype='multipart/form-data'>
             <div class="modal fade" id="editPanel" tabindex="-1" aria-labelledby="editPanelLabel" aria-hidden="true">
@@ -167,6 +182,7 @@
         </form>
     </div>
 </div>
+
 <!-- display message -->
 <?php
 if (isset($_SESSION['error'])) {
@@ -189,5 +205,15 @@ if (isset($_SESSION['success'])) {
 }
 ?>
 </body>
+<script>
+    //Preview upload image file when update product:
+    function loadFile2(e) {
+        var img = document.querySelector('#preview-change');
+        img.src = URL.createObjectURL(e.target.files[0]);
+        img.onload = () => {
+            URL.revokeObjectURL(img.src);
+        }
+    }
+</script>
 
 </html>

@@ -259,6 +259,10 @@ $cus = $result->fetch_object();
                 e.preventDefault();
                 $('#errOldPass').text('Please confirm your current password.');
             }
+<<<<<<< HEAD
+=======
+            
+>>>>>>> 2aae35d8e8946927f99bb380c4a64e5f3009b86b
             if ($('#newpass').val() == '' || $('#repass').val() == '') {
                 e.preventDefault();
                 $('#errNewPass').text('Please enter your new password and re-type it.');
@@ -291,6 +295,5 @@ if (isset($_SESSION['errDB'])) {
     unset($_SESSION['errDB']);
 }
 ?>
-
 </html>
 <?php $conn->close(); ?>

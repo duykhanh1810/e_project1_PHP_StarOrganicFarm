@@ -37,9 +37,14 @@ function adminLogin($userName, $password)
 function admin_AddProduct($name, $price, $detail, $categoryID, $imgURL)
 {
     $conn = connect();
-    
+
     //Check if product name exist:
-    $checkPName = $conn->query("SELECT productName FROM product WHERE productName = '$name'");
+    $sql = "SELECT productName FROM product WHERE productName = ?";
+    $stm = $conn->prepare($sql);
+    $stm->bind_param("s", $name);
+    $stm->execute();
+    $checkPName = $stm->get_result();
+    $stm->close();
     if ($checkPName->num_rows > 0) {
         $error = "The product name has already existed in the database.";
         return $error;
@@ -61,6 +66,7 @@ function admin_AddProduct($name, $price, $detail, $categoryID, $imgURL)
 function admin_findImg($id)
 {
     $conn = connect();
+    $id = $conn->real_escape_string($id);
     $result = $conn->query("SELECT imgURL FROM product WHERE productID = '$id'");
     if ($result->num_rows > 0) {
         while ($r = $result->fetch_assoc()) {
@@ -71,27 +77,28 @@ function admin_findImg($id)
     $conn->close();
 }
 
-function admin_removeProduct($pid)
-{
-    $conn = connect();
-    $sql = "DELETE FROM product WHERE productID = '$pid'";
-    $conn->query($sql);
-    $conn->close();
-}
+// function admin_removeProduct($pid)
+// {
+//     $conn = connect();
+//     $sql = "DELETE FROM product WHERE productID = '$pid'";
+//     $conn->query($sql);
+//     $conn->close();
+// }
 
 function admin_displayProduct($search, $order)
 {
     $conn = connect();
+    $search = $conn->real_escape_string($search);
     $sql = "SELECT pd.imgURL, pd.productID, pd.productName, ct.categoryName, pd.productDetail, pd.unitPrice, pd.status, ct.unit
     FROM product as pd 
     INNER JOIN category as ct ON pd.categoryID = ct.categoryID 
     WHERE pd.productName LIKE CONCAT('%', '$search', '%') OR ct.categoryName LIKE CONCAT('%', '$search', '%')
-    {$order}
-    ";
+    " . $order;
     $list = $conn->query($sql);
     if ($list->num_rows > 0) {
         echo "<table style='table-layout:fixed' class='tbl table table-striped table-hover'>
                 <tr class='head'>
+                    <th style='width:2%; vertical-align: middle;'>No.</th>
                     <th style='width:15%'>Product Name</th>
                     <th>Category</th>
                     <th style='width:40%;'>Product detail</th>
@@ -100,8 +107,11 @@ function admin_displayProduct($search, $order)
                     <th style='width:15%'>Manage</th>
                 </tr>
             ";
-        while ($item = $list->fetch_assoc()) { ?>
+        $i=1;
+        while ($item = $list->fetch_assoc()) {?>
+            
             <tr>
+                <td><?=$i?></td>
                 <td>
                     <p><img src="..\\<?= $item['imgURL'] ?>" alt="image" style="width:50%; height:50%"></p>
                     <p><b><?= $item['productName'] ?></b></p>
@@ -117,7 +127,7 @@ function admin_displayProduct($search, $order)
                 <td class="edit"><button class="item-list btn btn-success edit-product" data-bs-toggle="modal" data-id="<?= $item['productID'] ?>" data-bs-target="#editPanel">Update</button></td>
             </tr>
 
-        <?php   }
+        <?php $i++;  }
         echo "</table>";
     } else {
         echo "<table class='table'><tr><td><b>Product not found.</b></td></tr></table>";
@@ -128,7 +138,7 @@ function admin_updateProduct($pid, $pname, $price, $category, $detail, $imgURL, 
 {
     $conn = connect();
     $error = [];
-        
+
     //validate name:
     if (empty($pname)) {
         $error['name'] = "You must enter a product name.";
@@ -188,13 +198,13 @@ function admin_updateProduct($pid, $pname, $price, $category, $detail, $imgURL, 
 function admin_displayUser($search)
 {
     $conn = connect();
+    $search = $conn->real_escape_string($search);
     $sql = "SELECT s.staffID, s.userName, s.status, sr.roleName, s.email, SUM(CASE WHEN o.orderStatus = 'success' THEN o.orderValue ELSE 0 END) as totalSale, COUNT(o.orderStatus) as totalOrder, COUNT(CASE WHEN o.orderStatus = 'success' THEN o.orderStatus END) as successOrder
     FROM staff as s
     INNER JOIN staffrole as sr ON s.roleID = sr.roleID
     LEFT JOIN orders as o ON s.staffID = o.staffID
     GROUP BY s.staffID HAVING s.userName LIKE '%$search%' OR sr.roleName LIKE '%$search%'
     ORDER BY s.staffID";
-    $list = $conn->query($sql);
     $list = $conn->query($sql);
     if ($list->num_rows > 0) {
         echo "<table class='tbl table table-striped table-hover'>
@@ -376,9 +386,13 @@ function user_updateEmail($id, $email)
             $error = "Invalid email address.";
         } else {
             //check if email already taken by other user:
-            $checkEmail = $conn->query("SELECT * FROM staff WHERE staffID != '$id' AND email = '$email'");
-            if ($checkEmail->num_rows > 0) {
-                $error = "The email has already taken by other user.";
+            if (is_numeric($id)) {
+                $checkEmail = $conn->query("SELECT * FROM staff WHERE staffID != '$id' AND email = '$email'");
+                if ($checkEmail->num_rows > 0) {
+                    $error = "The email has already taken by other user.";
+                }
+            } else {
+                $error = 'invalid id number.';
             }
         }
     }
@@ -401,15 +415,20 @@ function user_changePass($id, $oldPass, $newPass, $rePass)
     $conn = connect();
     $error = '';
     //validate old pass
-    $query = $conn->query("SELECT * FROM staff WHERE staffID = '$id'");
-    $userInfo = $query->fetch_object();
-    if (!password_verify($oldPass, $userInfo->password)) {
-        $error = 'Incorrect old password';
-    } else {
-        if (strcmp($newPass, $rePass) != 0) {
-            $error = 'The password you re-entered doesn\'t match';
+    if (is_numeric($id)) {
+        $query = $conn->query("SELECT * FROM staff WHERE staffID = '$id'");
+        $userInfo = $query->fetch_object();
+        if (!password_verify($oldPass, $userInfo->password)) {
+            $error = 'Incorrect old password';
+        } else {
+            if (strcmp($newPass, $rePass) != 0) {
+                $error = 'The password you re-entered doesn\'t match';
+            }
         }
+    } else {
+        $error = 'Invalid user ID.';
     }
+
     if ($error != '') {
         return $error;
     } else {
@@ -462,7 +481,12 @@ function admin_displayCategory()
 function admin_getCategoryName($id)
 {
     $conn = connect();
-    $result = $conn->query("SELECT categoryName FROM category WHERE categoryID = '$id'");
+    $sql = "SELECT categoryName FROM category WHERE categoryID = ?";
+    $stm = $conn->prepare($sql);
+    $stm->bind_param("s", $id);
+    $stm->execute();
+    $result = $stm->get_result();
+    $stm->close();
     if ($result->num_rows > 0) {
         foreach ($result as $value) {
             $name = $value['categoryName'];
@@ -480,7 +504,7 @@ function admin_addCategory($cname, $cunit, $detail)
     if (empty($cname)) {
         $error['name'] = 'You must enter a name for the new category';
     }
-    if (!preg_match('/^[a-zA-Z0-9-_]*$/', $cname)) {
+    if (!preg_match('/^[a-zA-Z0-9-_ ]*$/', $cname)) {
         $error['name'] = 'Name must contain only alphanumeric character.';
     }
     $check_sql = "SELECT * FROM category WHERE categoryName = ?";
@@ -523,11 +547,16 @@ function admin_updateCategory($id, $name, $detail, $unit, $status)
     if (empty($name)) {
         $error['name'] = "You must enter a name for the category";
     }
-    $name = $conn->real_escape_string($name);
-    $findName = $conn->query("SELECT * FROM category WHERE categoryName = '$name' AND categoryID != '$id'");
-    if ($findName->num_rows > 0) {
-        $error['name'] = "The category name you've just entered has already existed.";
+    if (is_numeric($id)) {
+        $name = $conn->real_escape_string($name);
+        $findName = $conn->query("SELECT * FROM category WHERE categoryName = '$name' AND categoryID != '$id'");
+        if ($findName->num_rows > 0) {
+            $error['name'] = "The category name you've just entered has already existed.";
+        }
+    } else {
+        $error['id'] = 'Invalid ID number.';
     }
+
     if (!preg_match('/^[a-zA-Z0-9-_ ]*$/', $name)) {
         $error['name'] = "Name must contain only alphanumeric characters.";
     }
@@ -569,8 +598,11 @@ function admin_DisplayCustomer($search)
     $conn = connect();
     $sql = "SELECT c.customerName, c.customerEmail, c.customerPhone, SUM(CASE WHEN o.orderStatus = 'success' THEN o.orderValue END) as 'total', COUNT(CASE WHEN o.orderStatus = 'success' THEN o.customerID END) as 'count', c.joinDate
             FROM `customers` as c LEFT JOIN orders as o ON c.customerID = o.customerID 
-            GROUP BY c.customerID HAVING customerName LIKE '%$search%'";
-    $result = $conn->query($sql);
+            GROUP BY c.customerID HAVING customerName LIKE CONCAT('%',?,'%')";
+    $stm = $conn->prepare($sql);
+    $stm->bind_param("s", $search);
+    $stm->execute();
+    $result = $stm->get_result();
     if ($result->num_rows > 0) {
         echo "<table class='tbl table table-striped table-hover'>
                 <tr class='head'>
@@ -600,7 +632,7 @@ function admin_DisplayCustomer($search)
 function admin_contact()
 {
     $conn = connect();
-    $sql = "SELECT * FROM contact_us";
+    $sql = "SELECT * FROM contact_us ORDER BY datetime DESC";
     $result = $conn->query($sql);
     $html = '';
     if ($result->num_rows >= 0) {
@@ -615,13 +647,14 @@ function admin_contact()
                 </tr>
         ";
         foreach ($result as $value) {
+            $date = date('d/m/Y - H:s:i', strtotime($value['datetime']));
             $html .= "
             <tr>
                 <td>{$value['first_name']} {$value['last_name']}</td>
                 <td>{$value['email']}</td>
                 <td>{$value['phone']}</td>
                 <td>{$value['message']}</td>
-                <td>{$value['datetime']}</td>
+                <td>{$date}</td>
                 <td><a class='btn btn-primary' href='mailto:{$value['email']}'>Email</a></td>
             </tr>
             ";
@@ -632,7 +665,7 @@ function admin_contact()
     echo $html;
 }
 
-function admin_countOrder($date)
+function admin_countOrder()
 {
     $conn = connect();
     $orderCount = 0;
@@ -665,15 +698,21 @@ function admin_saleValue($date)
 function admin_displayOrder($search, $date)
 {
     $conn = connect();
+    $search = $conn->real_escape_string($search);
     if (!empty($date)) {
-        $sql = "SELECT * FROM orders as o
-        INNER JOIN customers as c ON o.customerID = c.customerID
-        LEFT JOIN staff as s on o.staffID = s.staffID
-        LEFT JOIN orderdetail as od ON o.orderID = od.orderID
-        INNER JOIN product as p ON od.productID = p.productID
-        GROUP BY o.orderID HAVING orderTime BETWEEN CONCAT('$date',' 00:00:00') AND CONCAT('$date',' 23:59:59') 
-        AND (o.orderStatus LIKE '%$search%'OR s.userName LIKE '%$search%' OR c.customerName LIKE '%$search%') ORDER BY o.orderTime DESC
-        ";
+        if(preg_match('/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/', $date)) {
+            $sql = "SELECT * FROM orders as o
+            INNER JOIN customers as c ON o.customerID = c.customerID
+            LEFT JOIN staff as s on o.staffID = s.staffID
+            LEFT JOIN orderdetail as od ON o.orderID = od.orderID
+            INNER JOIN product as p ON od.productID = p.productID
+            GROUP BY o.orderID HAVING orderTime BETWEEN CONCAT('$date',' 00:00:00') AND CONCAT('$date',' 23:59:59') 
+            AND (o.orderStatus LIKE '%$search%'OR s.userName LIKE '%$search%' OR c.customerName LIKE '%$search%') ORDER BY o.orderTime DESC
+            ";
+        } else {
+            die('You changed the input element to enter invalid data, are you trying to attack me?');
+        }
+        
     } else {
         $sql = "SELECT * FROM orders as o
         INNER JOIN customers as c ON o.customerID = c.customerID
@@ -753,6 +792,7 @@ function admin_displayGallery($category)
     if ($category == '') {
         $sql = "SELECT * FROM gallery";
     } else {
+        $category = $conn->real_escape_string($category);
         $sql = "SELECT * FROM gallery WHERE category = '$category' ORDER BY category";
     }
     $result = $conn->query($sql);

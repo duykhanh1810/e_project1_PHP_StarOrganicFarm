@@ -1,7 +1,7 @@
 <?php
 if ($user['userRole'] != 1) {
-    require "accessdenied.html";
-exit(); } else { ?>
+    require "accessdenied.html"; exit(); 
+    } else { ?>
     <div class="content">
         <h2>Category Management</h2>
         <div class="cat list row">
@@ -94,11 +94,11 @@ exit(); } else { ?>
 <?php
 if (isset($_SESSION['errUpdate'])) {
     echo "<script>alert('Operation FAILED! Please check the following error(s):\\n";
-    foreach ($_SESSION['error2'] as $value) {
+    foreach ($_SESSION['errUpdate'] as $value) {
         echo " - " . $value . "\\n";
     }
     echo "')</script>";
-    unset($_SESSION['error2']);
+    unset($_SESSION['errUpdate']);
 }
 
 if (isset($_SESSION['success'])) {

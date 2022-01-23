@@ -3,7 +3,11 @@ $(document).ready(function () {
 
     /*Event driven by click each "add to cart" button on the product page, 
     When user click on the button, a request will be sent to the server*/
+<<<<<<< HEAD
     $(document).on('click', '.2cart', function (e) {
+=======
+    $(document).on('click', '.2cart',  function(e) {
+>>>>>>> 2aae35d8e8946927f99bb380c4a64e5f3009b86b
         e.preventDefault();
         var productID = $(this).attr('data-id'); //The data-id attribute of the button contain the #id of the product
         var productName = $(this).attr('data-name'); //the data-name attribute of the button contain the #name of the product
@@ -38,13 +42,24 @@ $(document).ready(function () {
 
     /*change item quantity in the cart array: 
     This function triggers on the event when user change the quantity input of each product in cart
+<<<<<<< HEAD
     It should be triggered on document scale, since the 'cart-item' element which contain the 'quantity-input' is dymanically added 
     after the page is loaded.
+=======
+    It should be triggered on document scale, since the 'cart-item' element which contain the 'quantity-input' is dymanically added after the page is loaded.
+>>>>>>> 2aae35d8e8946927f99bb380c4a64e5f3009b86b
     */
     $(document).on('input', '.quantity-input', function () {
         updateCart(); //Call function to calculate value of the cart each time user change the quantity
         var productID = $(this).attr('data-id'); //The data-id attribute of the button contain the #id of the product
         var qtt = $(this).val(); //the new quantity of the product
+<<<<<<< HEAD
+=======
+        if(qtt <=0 ) {
+            qtt = 1;
+            $(this).val(1);
+        }
+>>>>>>> 2aae35d8e8946927f99bb380c4a64e5f3009b86b
         var sum = parseFloat($('#sum').text()); //the new total value in cart
 
         //Send all the above data to server
@@ -61,28 +76,32 @@ $(document).ready(function () {
 
     /*remove item from cart array*/
     $('.cart-items').on('click', '.remove', function () {
-        var removeID = $(this).attr('data-id');
+        var removeID = $(this).attr('data-id'); //get the id of the product to be removed from cart
+        //send request
         $.ajax({
-            url: 'changeCart.php',
+            url: 'changeCart.php', //this file will proceed the remove function
             method: 'get',
             data: {
                 removeID: removeID
             },
-            success: function () {
-                updateCart();
+            success: function () { //callback function: update cart value and count item
+                updateCart();  
                 countCart();
             }
         })
-        $(this).closest('tr').remove();
+        $(this).closest('tr').remove();  //remove the element from the page
     })
 
-    //function to udate total
+    //function to update value in cart, include: subtotal of each product, total value
     function updateCart() {
         var sum = 0;
         var quantity;
         $('#cart-product > tbody > tr').each(function () {
             quantity = $(this).find('.quantity-input').val();
             var price = parseFloat($(this).find('.price').val());
+            if(quantity<=0) {
+                quantity = 1;
+            }
             var subtotal = quantity * price;
             if (!isNaN(subtotal)) {
                 sum += subtotal;
@@ -90,15 +109,17 @@ $(document).ready(function () {
             $(this).find('.subtotal').val(Number(subtotal).toFixed(2));
             $(this).find('.visible-subtotal').text(Number(subtotal).toFixed(2));
         })
-        console.log(sum);
         $('#sum').text(Number(sum).toFixed(2));
     }
 
-    //Prevent 'go to cart' if nothing in cart
+    /*Prevent 'go to cart' if nothing in cart
+    On event 'click', check the length of the collection 'cartItem', 
+    if equal to zero then preven the default function of the button
+    */
     $('.gocart').on('click', function (e) {
-        var cartItem = document.querySelectorAll('.cart-row');
+        var cartItem = document.querySelectorAll('.cart-row'); 
         if (cartItem.length == 0) {
-            e.preventDefault();
+            e.preventDefault(); 
             alert('Please add something to your cart first.');
             return;
         }
@@ -117,8 +138,8 @@ $(document).ready(function () {
     function countCart(){
         var cartItem = document.querySelectorAll('.cart-row');
         var count = cartItem.length;
-        $('#badge').text(count);
-        if(count == 0) {
+        $('#badge').text(count); //update the inner text of the badge to show the number of product in cart
+        if(count == 0) { //if the count equal to zero then don't display the badge icon
             $('#badge').text('');
         }
     }

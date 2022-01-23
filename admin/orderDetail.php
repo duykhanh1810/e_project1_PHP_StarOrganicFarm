@@ -1,8 +1,8 @@
 <?php
 require "adminFunction.php";
 $conn = connect();
-if (isset($_POST['order'])) {
-    $orderID = $_POST['order'];
+if (isset($_GET['order'])) {
+    $orderID = $conn->real_escape_string($_GET['order']);
     $sql = "SELECT * FROM orders as o
         INNER JOIN customers as c ON o.customerID = c.customerID
         LEFT JOIN staff as s on o.staffID = s.staffID

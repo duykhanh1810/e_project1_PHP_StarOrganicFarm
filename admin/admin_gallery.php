@@ -5,30 +5,43 @@
             ?>
             <div class="content">
                 <h2>Gallery</h2>
-                <div class="gallery add" id="addgallery">
-                    <h4>Add to Gallery</h4>
-                    <form action="updateGallery.php" method="post" enctype="multipart/form-data">
-                        <div class="input-group mb-1">
-                            <span class="input-group-text">Category:</span>
-                            <select class="form-select" name="category" id="ctg" style="max-width:20%">
-                                <option value="select...">select...</option>
-                                <?php
-                                foreach ($catList as $value) {
-                                    echo "<option value='{$value['category']}'>{$value['category']}</option>";
-                                }
-                                ?>
-                            </select>
-                            
-                            <input style="max-width:30%" type="file" class="form-control" id="customFile" name="picture" accept="image/*" />
+                <div class="row">
+                    <div class="col-8">
+                        <div class="add-gallery" id="addgallery">
+                            <h4>Add to Gallery</h4>
+                            <form action="updateGallery.php" method="post" enctype="multipart/form-data">
+                                <div class="input-group mb-1">
+                                    <span class="input-group-text">Category:</span>
+                                    <select class="form-select" name="category" id="ctg">
+                                        <option value="select...">select...</option>
+                                        <?php
+                                        foreach ($catList as $value) {
+                                            echo "<option value='{$value['category']}'>{$value['category']}</option>";
+                                        }
+                                        ?>
+                                    </select>
+
+                                    <input type="file" class="form-control" id="customFile" name="picture" accept="image/*" onchange="loadFile(event);" />
+                                </div>
+
+                                <!-- image upload -->
+                                <!-- submit -->
+                                <div class="submit input-group mb3">
+                                    <input class="btn-add btn btn-primary" type="submit" value="Add" name="add" id="add">
+                                    <!-- <button class="btn-add btn btn-danger" type="reset" id="reset">Reset</button> -->
+                                </div>
+                            </form>
                         </div>
-                        <!-- image upload -->
-                        <!-- submit -->
-                        <div class="submit input-group mb3">
-                            <input class="btn-add btn btn-primary" type="submit" value="Add" name="add" id="add">
-                            <button class="btn-add btn btn-danger" type="reset" id="reset">Reset</button>
+                    </div>
+                    <div class="col-4">
+                        <div id='preview-img' style="display:none;">
+                            <p><small>Preview:</small></p>
+                            <img id='preview' style='height:150px'>
                         </div>
-                    </form>
+                    </div>
                 </div>
+
+
                 <hr>
 
                 <div class="gallery list">
@@ -59,7 +72,7 @@
                                         <div style="border: none; background: #dbdbdb; padding: 5px; position: relative">
                                             <img style="width:95%; display: block; margin: 0 auto;" src="../<?= $value['imgURL'] ?>" alt="image">
                                             <div style="position: absolute; top: 70%; right:5%; display:flex; z-index:1" class="gl-edit">
-                                                <a href="deleteGallery.php?pic=<?= $value['id'] ?>"  class="btn btn-warning" onclick="return confirm('Do you want to remove this item?')"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                                <a href="deleteGallery.php?pic=<?= $value['id'] ?>" class="btn btn-warning" onclick="return confirm('Do you want to remove this item?')"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                                             </div>
                                         </div>
                                     </div>
@@ -94,5 +107,16 @@
             }
             ?>
             </body>
+            <script>
+                function loadFile(e) {
+                    var img = document.querySelector('#preview');
+                    var preview = document.querySelector('#preview-img');
+                    preview.style.display = 'block';
+                    img.src = URL.createObjectURL(e.target.files[0]);
+                    img.onload = () => {
+                        URL.revokeObjectURL(img.src);
+                    }
+                }
+            </script>
 
             </html>

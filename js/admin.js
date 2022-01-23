@@ -51,7 +51,7 @@ $(document).ready(function () {
     $('.order-detail').click(function(){
         var orderID = $(this).attr("data-id");
         $.ajax({
-            type: "post",
+            type: "get",
             url: "orderDetail.php",
             data: {order:orderID},
             success: function (data) {

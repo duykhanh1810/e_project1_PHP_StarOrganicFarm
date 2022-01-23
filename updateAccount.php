@@ -91,6 +91,9 @@ if (isset($_POST['uppass'])) {
         if (strcmp($newPass, $rePass) != 0) {
             $error['pass'] = 'The password you re-entered doesn\'t match';
         }
+        if(strcmp($oldPass,$newPass) == 0){
+            $error['pass'] = 'The password you entered same the old password';
+        }
     }
     if (count($error) > 0) {
         $_SESSION['error'] = $error;

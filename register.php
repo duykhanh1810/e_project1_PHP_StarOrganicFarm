@@ -15,7 +15,7 @@ function customerRegister($name, $email, $phone, $pass, $repass) {
     $conn = connect();
     $error = [];
     //validate name:
-    $name = filter_var($name, FILTER_SANITIZE_STRING);
+    $name = filter_var(trim($name), FILTER_SANITIZE_STRING);
     //validate email:
     if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
         $error['email'] = 'Invalid email address'; //check email string
@@ -26,7 +26,7 @@ function customerRegister($name, $email, $phone, $pass, $repass) {
         }
     }
     //Validate phone:
-    if(!preg_match('/^[0-9]*$/', $phone) || strlen($phone) < 9){
+    if(!preg_match('/^\+?[0-9]*$/', $phone) || strlen($phone) < 9){
         $error['phone'] = 'Invalid phone number'; //check phone string
     } else {
         $checkphone = $conn->query("SELECT * FROM customers WHERE customerPhone = '$phone'");
